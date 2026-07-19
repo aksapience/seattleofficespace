@@ -65,6 +65,24 @@ All listing content lives in `data.js`. Each office is an object:
 
 ## Note on data
 
-The listings included here are **illustrative samples** assembled for an office
-search. Verify pricing, square footage, availability, and amenities directly
-with each building before making any commitments.
+The listings map to **12 real Seattle buildings** compiled from a set of 13
+candidate URLs (two of them — 701 5th Ave and columbiacenterseattle.com —
+point to the **same building**, Columbia Center, so they were merged into one
+listing).
+
+Data confidence varies by building:
+
+- **Confirmed from the building's own leasing site:** Smith Tower, Columbia
+  Center, and The Pioneer Collective (Belltown). Amenity details for these were
+  taken directly from the source.
+- **Estimated:** the remaining 9 buildings. Their listing pages (LoopNet,
+  CommercialCafe, CBRE) blocked automated retrieval, so price, square footage,
+  seat counts, and amenities are **educated estimates** based on the building
+  and neighborhood — not published figures.
+
+Photos are **representative stock images** (Unsplash), not actual photos of
+each building.
+
+**Verify every figure** — pricing, square footage, availability, parking cost,
+and amenities — directly with each building or broker before making any
+commitments.
