@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seattle Office Space Finder</title>
+  <meta name="description" content="Interactive map of office spaces in Seattle — square footage, price, parking, amenities, and ferry terminal proximity." />
+
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-mark">◆</span>
+      <div>
+        <h1>Seattle Office Space Finder</h1>
+        <p class="tagline">Click a location on the map to explore the space</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="ferry-badge">⛴ Distances measured from Colman Dock (Pier 52)</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="filters">
+        <label class="filter-field">
+          <span>Neighborhood</span>
+          <select id="filter-neighborhood">
+            <option value="all">All neighborhoods</option>
+          </select>
+        </label>
+        <label class="filter-field">
+          <span>Max monthly price</span>
+          <select id="filter-price">
+            <option value="all">Any price</option>
+            <option value="15000">Under $15k</option>
+            <option value="30000">Under $30k</option>
+            <option value="50000">Under $50k</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="listings" id="listings">
+        <!-- Office cards injected by app.js -->
+      </div>
+    </aside>
+
+    <section class="map-wrap">
+      <div id="map"></div>
+    </section>
+
+    <aside class="detail-panel" id="detail-panel" aria-live="polite">
+      <div class="detail-empty" id="detail-empty">
+        <div class="detail-empty-icon">🏢</div>
+        <h2>Select an office</h2>
+        <p>Choose a marker on the map or a card in the list to see photos, pricing, amenities, and what's nearby.</p>
+      </div>
+      <div class="detail-content" id="detail-content" hidden>
+        <!-- Detail injected by app.js -->
+      </div>
+    </aside>
+  </main>
+
+  <!-- Leaflet JS -->
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
