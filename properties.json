@@ -26,16 +26,82 @@
       "bike_storage": "Yes",
       "parking": null,
       "meeting_rooms": "10 conference/meeting rooms",
-      "amenities": ["Rooftop terrace", "Interior courtyard", "Phone booths", "Mail service", "Lockers", "Keyless entry", "On-site management", "24-hr access", "Operable windows", "Curated art"],
-      "scores": {"walk": 100, "transit": 100, "bike": 80},
+      "amenities": [
+        "Rooftop terrace",
+        "Interior courtyard",
+        "Phone booths",
+        "Mail service",
+        "Lockers",
+        "Keyless entry",
+        "On-site management",
+        "24-hr access",
+        "Operable windows",
+        "Curated art"
+      ],
+      "scores": {
+        "walk": 100,
+        "transit": 100,
+        "bike": 80
+      },
       "source_url": "https://www.loopnet.com/Listing/2800-1st-Ave-Seattle-WA/33332812/",
       "spaces": [
-        {"suite": "2nd Fl 201", "size": "230 SF", "price_per_sf_yr": "$135.60", "monthly": "$2,599"},
-        {"suite": "2nd Fl 209", "size": "575 SF", "price_per_sf_yr": "$134.52", "monthly": "$6,446"},
-        {"suite": "3rd Fl 301", "size": "145 SF", "price_per_sf_yr": "$132.36", "monthly": "$1,599"},
-        {"suite": "3rd Fl 312", "size": "455 SF", "price_per_sf_yr": "$141.12", "monthly": "$5,351"},
-        {"suite": "3rd Fl 321", "size": "133 SF", "price_per_sf_yr": "$144.36", "monthly": "$1,600"}
-      ]
+        {
+          "suite": "2nd Fl 201",
+          "size": "230 SF",
+          "price_per_sf_yr": "$135.60",
+          "monthly": "$2,599"
+        },
+        {
+          "suite": "2nd Fl 209",
+          "size": "575 SF",
+          "price_per_sf_yr": "$134.52",
+          "monthly": "$6,446"
+        },
+        {
+          "suite": "3rd Fl 301",
+          "size": "145 SF",
+          "price_per_sf_yr": "$132.36",
+          "monthly": "$1,599"
+        },
+        {
+          "suite": "3rd Fl 312",
+          "size": "455 SF",
+          "price_per_sf_yr": "$141.12",
+          "monthly": "$5,351"
+        },
+        {
+          "suite": "3rd Fl 321",
+          "size": "133 SF",
+          "price_per_sf_yr": "$144.36",
+          "monthly": "$1,600"
+        }
+      ],
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Street Bean Cafe",
+            "note": "nonprofit roaster",
+            "rating": 4.7
+          },
+          {
+            "name": "Cherry Street Coffee House",
+            "note": "bagels + coffee",
+            "rating": 4.3
+          }
+        ],
+        "food": [
+          {
+            "name": "Rocco's",
+            "note": "pizza + bar",
+            "rating": 4.4
+          },
+          {
+            "name": "Hatch Cantina",
+            "note": "Mexican / Southwestern",
+            "rating": 4.3
+          }
+        ]
+      }
     },
     {
       "id": "journal-of-commerce",
@@ -56,13 +122,63 @@
       "bike_storage": null,
       "parking": "Not listed; loading access from Western Ave",
       "meeting_rooms": null,
-      "amenities": ["20-ft ceilings", "Floor-to-ceiling storefront windows", "Exposed brick", "Timber beams", "Elliott Bay views", "1 block from ferry terminal"],
-      "scores": {"walk": 100, "transit": 100, "bike": 50},
+      "amenities": [
+        "20-ft ceilings",
+        "Floor-to-ceiling storefront windows",
+        "Exposed brick",
+        "Timber beams",
+        "Elliott Bay views",
+        "1 block from ferry terminal"
+      ],
+      "scores": {
+        "walk": 100,
+        "transit": 100,
+        "bike": 50
+      },
       "source_url": "https://www.loopnet.com/Listing/81-85-Columbia-St-Seattle-WA/39711766/",
       "spaces": [
-        {"suite": "1st Fl 81", "size": "4,700 SF", "price_per_sf_yr": "$19.50", "monthly": "$7,638", "use": "Retail"},
-        {"suite": "3rd Fl 303", "size": "1,913 SF", "price_per_sf_yr": "$19.50", "monthly": "$3,109", "use": "Office", "fits": "5–16"}
-      ]
+        {
+          "suite": "1st Fl 81",
+          "size": "4,700 SF",
+          "price_per_sf_yr": "$19.50",
+          "monthly": "$7,638",
+          "use": "Retail"
+        },
+        {
+          "suite": "3rd Fl 303",
+          "size": "1,913 SF",
+          "price_per_sf_yr": "$19.50",
+          "monthly": "$3,109",
+          "use": "Office",
+          "fits": "5–16"
+        }
+      ],
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Saigon Drip Cafe",
+            "note": "Vietnamese coffee + banh mi",
+            "rating": 4.9
+          },
+          {
+            "name": "Day Made Kaffe Bar",
+            "note": "Copenhagen-style",
+            "rating": 4.8
+          }
+        ],
+        "food": [
+          {
+            "name": "Public House",
+            "note": "burgers + bar",
+            "rating": 4.9
+          },
+          {
+            "name": "Salt Harvest",
+            "note": "seasonal American",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "pacific-bldg",
@@ -83,15 +199,74 @@
       "bike_storage": "Yes",
       "parking": "158 covered @ $265/mo; 60 reserved @ $335/mo; surface & tandem options",
       "meeting_rooms": null,
-      "amenities": ["Controlled access", "Security system", "Shower facilities", "12-ft unfinished ceilings"],
-      "scores": {"walk": 100, "transit": 100, "bike": 50},
+      "amenities": [
+        "Controlled access",
+        "Security system",
+        "Shower facilities",
+        "12-ft unfinished ceilings"
+      ],
+      "scores": {
+        "walk": 100,
+        "transit": 100,
+        "bike": 50
+      },
       "source_url": "https://www.loopnet.com/Listing/720-3rd-Ave-Seattle-WA/39432541/",
       "spaces": [
-        {"suite": "1600", "size": "1,921 SF", "price_per_sf_yr": "$20.00", "monthly": "$3,202", "fits": "5–16"},
-        {"suite": "1605", "size": "1,026 SF", "price_per_sf_yr": "$20.00", "monthly": "$1,710", "fits": "3–9"},
-        {"suite": "1607", "size": "1,179 SF", "price_per_sf_yr": "$20.00", "monthly": "$1,965", "fits": "3–10"},
-        {"suite": "1610", "size": "4,404 SF", "price_per_sf_yr": "$22.00", "monthly": "$8,074", "fits": "12–36"}
-      ]
+        {
+          "suite": "1600",
+          "size": "1,921 SF",
+          "price_per_sf_yr": "$20.00",
+          "monthly": "$3,202",
+          "fits": "5–16"
+        },
+        {
+          "suite": "1605",
+          "size": "1,026 SF",
+          "price_per_sf_yr": "$20.00",
+          "monthly": "$1,710",
+          "fits": "3–9"
+        },
+        {
+          "suite": "1607",
+          "size": "1,179 SF",
+          "price_per_sf_yr": "$20.00",
+          "monthly": "$1,965",
+          "fits": "3–10"
+        },
+        {
+          "suite": "1610",
+          "size": "4,404 SF",
+          "price_per_sf_yr": "$22.00",
+          "monthly": "$8,074",
+          "fits": "12–36"
+        }
+      ],
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Pegasus Coffee Bar",
+            "note": "cozy loft cafe",
+            "rating": 4.7
+          },
+          {
+            "name": "Ghost Note Coffee",
+            "note": "Seattle Tower nook",
+            "rating": 4.4
+          }
+        ],
+        "food": [
+          {
+            "name": "Nom House Vietnamese Kitchen",
+            "note": "banh mi lunch",
+            "rating": 4.7
+          },
+          {
+            "name": "Yard House",
+            "note": "gastropub",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "columbia-center",
@@ -112,11 +287,50 @@
       "bike_storage": "Yes",
       "parking": "6 underground levels, 700+ spaces, connected to main lobby",
       "meeting_rooms": "Yes (Regus)",
-      "amenities": ["360° views", "Columbia Tower Club (fl 75–76)", "LEED Platinum", "Energy Star 91", "Wired Certified Platinum", "Atrium", "Dry cleaner", "24-hr access"],
-      "scores": {"walk": 100, "transit": 100, "bike": 50},
+      "amenities": [
+        "360° views",
+        "Columbia Tower Club (fl 75–76)",
+        "LEED Platinum",
+        "Energy Star 91",
+        "Wired Certified Platinum",
+        "Atrium",
+        "Dry cleaner",
+        "24-hr access"
+      ],
+      "scores": {
+        "walk": 100,
+        "transit": 100,
+        "bike": 50
+      },
       "source_url": "https://www.loopnet.com/Listing/701-5th-Ave-Seattle-WA/4439423/",
       "additional_source_url": "https://columbiacenterseattle.com/",
-      "spaces": []
+      "spaces": [],
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Monorail Espresso",
+            "note": "in-building, 4th-floor lobby",
+            "rating": 4.7
+          },
+          {
+            "name": "Starbucks (lobby)",
+            "note": "ground floor",
+            "rating": 4.2
+          }
+        ],
+        "food": [
+          {
+            "name": "Elephant & Castle",
+            "note": "British pub",
+            "rating": 4.5
+          },
+          {
+            "name": "Yard House",
+            "note": "gastropub",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "pioneer-building",
@@ -137,16 +351,77 @@
       "bike_storage": "Yes",
       "parking": null,
       "meeting_rooms": "Yes — conference rooms",
-      "amenities": ["Fully furnished", "High-speed internet", "Phone booths", "Print/copy", "Mail service", "High ceilings", "Natural light", "Coffee/tea", "24/7 access (dedicated desks)"],
+      "amenities": [
+        "Fully furnished",
+        "High-speed internet",
+        "Phone booths",
+        "Print/copy",
+        "Mail service",
+        "High ceilings",
+        "Natural light",
+        "Coffee/tea",
+        "24/7 access (dedicated desks)"
+      ],
       "scores": null,
       "source_url": "https://www.loopnet.com/Listing/600-1st-Ave-Seattle-WA/16792583/",
       "spaces": [
-        {"suite": "Coworking membership", "size": null, "monthly": "$148.75", "fits": "1"},
-        {"suite": "Dedicated desk", "size": null, "monthly": "$329.58", "fits": "1"},
-        {"suite": "1-2 person office", "size": "90 SF", "monthly": "$531.68", "fits": "1–2"},
-        {"suite": "Team suite 200A", "size": "725 SF", "monthly": "$3,478", "fits": "8–10"},
-        {"suite": "Team suite 200B", "size": "1,650 SF", "monthly": "$4,538", "fits": "1–24"}
-      ]
+        {
+          "suite": "Coworking membership",
+          "size": null,
+          "monthly": "$148.75",
+          "fits": "1"
+        },
+        {
+          "suite": "Dedicated desk",
+          "size": null,
+          "monthly": "$329.58",
+          "fits": "1"
+        },
+        {
+          "suite": "1-2 person office",
+          "size": "90 SF",
+          "monthly": "$531.68",
+          "fits": "1–2"
+        },
+        {
+          "suite": "Team suite 200A",
+          "size": "725 SF",
+          "monthly": "$3,478",
+          "fits": "8–10"
+        },
+        {
+          "suite": "Team suite 200B",
+          "size": "1,650 SF",
+          "monthly": "$4,538",
+          "fits": "1–24"
+        }
+      ],
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Saigon Drip Cafe",
+            "note": "Vietnamese coffee",
+            "rating": 4.9
+          },
+          {
+            "name": "Day Made Kaffe Bar",
+            "note": "Copenhagen-style",
+            "rating": 4.8
+          }
+        ],
+        "food": [
+          {
+            "name": "Public House",
+            "note": "burgers + bar",
+            "rating": 4.9
+          },
+          {
+            "name": "Salt Harvest",
+            "note": "seasonal American",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "smith-tower",
@@ -167,10 +442,47 @@
       "bike_storage": "Yes",
       "parking": "1/1,000 RSF ratio in nearby garage",
       "meeting_rooms": "Building conference room (free to tenants)",
-      "amenities": ["22nd-floor roof deck w/ fire pit & lounge", "Operable windows", "24-hr security", "On-site management", "Upgraded seismic/HVAC/telecom", "Elliott Bay & mountain views"],
-      "scores": {"walk": 98, "transit": 100, "bike": null},
+      "amenities": [
+        "22nd-floor roof deck w/ fire pit & lounge",
+        "Operable windows",
+        "24-hr security",
+        "On-site management",
+        "Upgraded seismic/HVAC/telecom",
+        "Elliott Bay & mountain views"
+      ],
+      "scores": {
+        "walk": 98,
+        "transit": 100,
+        "bike": null
+      },
       "source_url": "https://www.smithtower.com/leasing/",
-      "spaces": []
+      "spaces": [],
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Caffe Vita (Smith Tower)",
+            "note": "in-building roaster",
+            "rating": 4.3
+          },
+          {
+            "name": "Saigon Drip Cafe",
+            "note": "Vietnamese coffee",
+            "rating": 4.9
+          }
+        ],
+        "food": [
+          {
+            "name": "Public House",
+            "note": "burgers + bar",
+            "rating": 4.9
+          },
+          {
+            "name": "Salt Harvest",
+            "note": "seasonal American",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "qualtrics-tower",
@@ -192,14 +504,57 @@
       "bike_storage": "Yes — bike club, storage & service stations",
       "parking": "Efficient parking, valet services, EV charging",
       "meeting_rooms": "Multiple event spaces",
-      "amenities": ["24,000 SF covered outdoor open space", "Tenant view deck", "~10-ft perimeter drop ceiling", "Concierge-style management", "Unobstructed views", "Plug-and-play / fully furnished"],
+      "amenities": [
+        "24,000 SF covered outdoor open space",
+        "Tenant view deck",
+        "~10-ft perimeter drop ceiling",
+        "Concierge-style management",
+        "Unobstructed views",
+        "Plug-and-play / fully furnished"
+      ],
       "scores": null,
       "source_url": "https://www.cbre.com/properties/properties-for-lease/office/details/US-SMPL-85173/qualtrics-tower-2u-1201-2nd-avenue-seattle-wa-98101",
       "spaces": [
-        {"suite": "Floor 19", "size": "7,232 SF", "use": "Office (furnished)"},
-        {"suite": "Floor 23", "size": "18,792 SF"},
-        {"suite": "Floor 27", "size": "18,792 SF"}
-      ]
+        {
+          "suite": "Floor 19",
+          "size": "7,232 SF",
+          "use": "Office (furnished)"
+        },
+        {
+          "suite": "Floor 23",
+          "size": "18,792 SF"
+        },
+        {
+          "suite": "Floor 27",
+          "size": "18,792 SF"
+        }
+      ],
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Caffe Ladro (2+U lobby)",
+            "note": "in-building",
+            "rating": 4.1
+          },
+          {
+            "name": "The Shop by Porter",
+            "note": "cafe + work space",
+            "rating": 4.5
+          }
+        ],
+        "food": [
+          {
+            "name": "Yard House",
+            "note": "gastropub",
+            "rating": 4.4
+          },
+          {
+            "name": "Alder & Ash",
+            "note": "American / bar",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "securities-bldg",
@@ -221,9 +576,39 @@
       "parking": "230 spaces, ratio 1.00/1,000 SF",
       "meeting_rooms": null,
       "amenities": [],
-      "scores": {"walk": 99, "transit": 100, "bike": 81},
+      "scores": {
+        "walk": 99,
+        "transit": 100,
+        "bike": 81
+      },
       "source_url": "https://www.commercialcafe.com/commercial-property/us/wa/seattle/securities-bldg/",
-      "spaces": []
+      "spaces": [],
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Slow Day Coffee",
+            "note": "specialty pour-overs",
+            "rating": 4.7
+          },
+          {
+            "name": "Coffee TAB",
+            "note": "nonprofit, spacious",
+            "rating": 4.7
+          }
+        ],
+        "food": [
+          {
+            "name": "Biscuit Bitch",
+            "note": "Southern breakfast",
+            "rating": 4.4
+          },
+          {
+            "name": "Rocco's",
+            "note": "pizza + bar",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "decatur-bldg",
@@ -246,13 +631,58 @@
       "parking": "Not on building; nearby Century Square Garage & Midtown Parking (~0.1 mi)",
       "meeting_rooms": null,
       "amenities": [],
-      "scores": {"walk": 99, "transit": 100, "bike": 80},
+      "scores": {
+        "walk": 99,
+        "transit": 100,
+        "bike": 80
+      },
       "source_url": "https://www.commercialcafe.com/commercial-property/us/wa/seattle/the-decatur-building/",
       "spaces": [
-        {"suite": "#200", "size": "4,424 SF", "price_per_sf_yr": "$19.00", "lease_type": "NNN"},
-        {"suite": "#300", "size": "21,686 SF", "price_per_sf_yr": "$19.00", "lease_type": "NNN"},
-        {"suite": "#400", "size": "21,739 SF", "price_per_sf_yr": "$19.00", "lease_type": "NNN"}
-      ]
+        {
+          "suite": "#200",
+          "size": "4,424 SF",
+          "price_per_sf_yr": "$19.00",
+          "lease_type": "NNN"
+        },
+        {
+          "suite": "#300",
+          "size": "21,686 SF",
+          "price_per_sf_yr": "$19.00",
+          "lease_type": "NNN"
+        },
+        {
+          "suite": "#400",
+          "size": "21,739 SF",
+          "price_per_sf_yr": "$19.00",
+          "lease_type": "NNN"
+        }
+      ],
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Coffee Astronaut",
+            "note": "Colombian specialty",
+            "rating": 5
+          },
+          {
+            "name": "Hagen Coffee Roasters",
+            "note": "roaster + bakery",
+            "rating": 4.6
+          }
+        ],
+        "food": [
+          {
+            "name": "Yard House",
+            "note": "gastropub",
+            "rating": 4.4
+          },
+          {
+            "name": "SPIN Seattle",
+            "note": "ping-pong bar + food",
+            "rating": 4.5
+          }
+        ]
+      }
     },
     {
       "id": "belltown-collective",
@@ -273,14 +703,64 @@
       "bike_storage": null,
       "parking": "Not listed; nearby Republic Parking NW (~0.06 mi), Diamond Parking (~0.14 mi)",
       "meeting_rooms": null,
-      "amenities": ["High ceilings", "Hard-surface floors", "Sprinklered basement", "Two blocks from The Crocodile"],
-      "scores": {"walk": 97, "transit": 100, "bike": 63},
+      "amenities": [
+        "High ceilings",
+        "Hard-surface floors",
+        "Sprinklered basement",
+        "Two blocks from The Crocodile"
+      ],
+      "scores": {
+        "walk": 97,
+        "transit": 100,
+        "bike": 63
+      },
       "source_url": "https://www.commercialcafe.com/commercial-property/us/wa/seattle/the-belltown-collective/",
       "spaces": [
-        {"suite": "Basement", "size": "5,324 SF", "price_per_sf_yr": "$10.00", "lease_type": "NNN sublease"},
-        {"suite": "Lower Level", "size": "5,700 SF", "price_per_sf_yr": "$10.00", "lease_type": "NNN sublease"},
-        {"suite": "Main Level", "size": "6,276 SF", "price_per_sf_yr": "$10.00", "lease_type": "NNN sublease"}
-      ]
+        {
+          "suite": "Basement",
+          "size": "5,324 SF",
+          "price_per_sf_yr": "$10.00",
+          "lease_type": "NNN sublease"
+        },
+        {
+          "suite": "Lower Level",
+          "size": "5,700 SF",
+          "price_per_sf_yr": "$10.00",
+          "lease_type": "NNN sublease"
+        },
+        {
+          "suite": "Main Level",
+          "size": "6,276 SF",
+          "price_per_sf_yr": "$10.00",
+          "lease_type": "NNN sublease"
+        }
+      ],
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Anchor & Bloom Cafe",
+            "note": "independent, bagels",
+            "rating": 4.8
+          },
+          {
+            "name": "Coffee TAB",
+            "note": "nonprofit, spacious",
+            "rating": 4.7
+          }
+        ],
+        "food": [
+          {
+            "name": "Rocco's",
+            "note": "pizza + bar",
+            "rating": 4.4
+          },
+          {
+            "name": "oh dang",
+            "note": "crispy chicken, late-night",
+            "rating": 5
+          }
+        ]
+      }
     },
     {
       "id": "terminal-sales",
@@ -302,12 +782,51 @@
       "parking": "Not listed; nearby Trust Parking (~0.08 mi), Upark (~0.09 mi)",
       "meeting_rooms": null,
       "amenities": [],
-      "scores": {"walk": 98, "transit": 100, "bike": 61},
+      "scores": {
+        "walk": 98,
+        "transit": 100,
+        "bike": 61
+      },
       "source_url": "https://www.commercialcafe.com/commercial-property/us/wa/seattle/terminal-sales-building/",
       "spaces": [
-        {"suite": "#219", "size": "5,903 SF", "price_per_sf_yr": "$37.00", "note": "divisible from 3,617 SF"},
-        {"suite": "#620", "size": "1,888 SF", "price_per_sf_yr": "$39.00"}
-      ]
+        {
+          "suite": "#219",
+          "size": "5,903 SF",
+          "price_per_sf_yr": "$37.00",
+          "note": "divisible from 3,617 SF"
+        },
+        {
+          "suite": "#620",
+          "size": "1,888 SF",
+          "price_per_sf_yr": "$39.00"
+        }
+      ],
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Slow Day Coffee",
+            "note": "specialty pour-overs",
+            "rating": 4.7
+          },
+          {
+            "name": "Coffee TAB",
+            "note": "nonprofit, spacious",
+            "rating": 4.7
+          }
+        ],
+        "food": [
+          {
+            "name": "Biscuit Bitch",
+            "note": "Southern breakfast",
+            "rating": 4.4
+          },
+          {
+            "name": "Rocco's",
+            "note": "pizza + bar",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "pioneer-collective",
@@ -329,15 +848,70 @@
       "bike_storage": "Yes — plus showers",
       "parking": null,
       "meeting_rooms": "Conference-room allotment + discounted rentals",
-      "amenities": ["1 Gbps fiber", "24/7 access", "On-site staff/community manager", "Business address & mail", "Printing/scanning", "Phone booths", "Signage", "Global LExC network access"],
+      "amenities": [
+        "1 Gbps fiber",
+        "24/7 access",
+        "On-site staff/community manager",
+        "Business address & mail",
+        "Printing/scanning",
+        "Phone booths",
+        "Signage",
+        "Global LExC network access"
+      ],
       "scores": null,
       "source_url": "https://www.thepioneercollective.com/offices-seattle-belltown",
       "spaces": [
-        {"tier": "Small", "desks": "1–2", "memberships": "2–3", "monthly": "$945 – $1,500"},
-        {"tier": "Medium", "desks": "3–6", "memberships": "5–9", "monthly": "$1,500 – $3,900"},
-        {"tier": "Large", "desks": "7–10", "memberships": "10–15", "monthly": "$4,000 and up"},
-        {"tier": "XL", "desks": "11+", "memberships": "16+", "monthly": "$6,750 and up"}
-      ]
+        {
+          "tier": "Small",
+          "desks": "1–2",
+          "memberships": "2–3",
+          "monthly": "$945 – $1,500"
+        },
+        {
+          "tier": "Medium",
+          "desks": "3–6",
+          "memberships": "5–9",
+          "monthly": "$1,500 – $3,900"
+        },
+        {
+          "tier": "Large",
+          "desks": "7–10",
+          "memberships": "10–15",
+          "monthly": "$4,000 and up"
+        },
+        {
+          "tier": "XL",
+          "desks": "11+",
+          "memberships": "16+",
+          "monthly": "$6,750 and up"
+        }
+      ],
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Coffee TAB",
+            "note": "nonprofit, spacious",
+            "rating": 4.7
+          },
+          {
+            "name": "Slow Day Coffee",
+            "note": "specialty pour-overs",
+            "rating": 4.7
+          }
+        ],
+        "food": [
+          {
+            "name": "oh dang",
+            "note": "crispy chicken, late-night",
+            "rating": 5
+          },
+          {
+            "name": "Rocco's",
+            "note": "pizza + bar",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "8th-and-olive",
@@ -360,11 +934,49 @@
       "meeting_rooms": "New building conference facility",
       "building_hours": "Mon–Fri 7:00am–6:00pm; Sat 8:00am–12:00pm",
       "transportation": "Perfect 100 Transit Score; Convention Place Transit Center 1 block away; easy I-5 & Hwy 99 access",
-      "amenities": ["7 upgraded Westinghouse elevators", "Key-card access", "IP camera security", "Fully sprinklered", "BAS-controlled HVAC", "5 W/SF electrical (expandable to 10)", "Comcast/Integra/TW Telecom"],
-      "scores": {"walk": null, "transit": 100, "bike": null},
+      "amenities": [
+        "7 upgraded Westinghouse elevators",
+        "Key-card access",
+        "IP camera security",
+        "Fully sprinklered",
+        "BAS-controlled HVAC",
+        "5 W/SF electrical (expandable to 10)",
+        "Comcast/Integra/TW Telecom"
+      ],
+      "scores": {
+        "walk": null,
+        "transit": 100,
+        "bike": null
+      },
       "source_url": null,
       "source_note": "Colliers International fact sheet (8th & Olive)",
-      "spaces": []
+      "spaces": [],
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Caffe Umbria (Olive Way)",
+            "note": "Italian, generations-owned",
+            "rating": 4.7
+          },
+          {
+            "name": "Coffee Astronaut",
+            "note": "Colombian specialty",
+            "rating": 5
+          }
+        ],
+        "food": [
+          {
+            "name": "Alder & Ash",
+            "note": "American / bar",
+            "rating": 4.4
+          },
+          {
+            "name": "Elephant & Castle",
+            "note": "British pub",
+            "rating": 4.5
+          }
+        ]
+      }
     }
   ]
 }
