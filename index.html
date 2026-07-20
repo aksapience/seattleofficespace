@@ -1,1 +1,1176 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seattle Office Search — Sapience AI</title>
+<meta name="description" content="Interactive scouting board for downtown Seattle office space. Compare 13 spaces by price, size, neighborhood, and walk to the ferry terminal.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+<style>
+  :root{
+    /* Sapience AI brand palette */
+    --plum:#674C67;        /* Imperial Plum — identity/weight */
+    --charcoal:#333436;    /* Charcoal Grey — grounds the work */
+    --sand:#FFFBF4;        /* Sand — warm light foundation */
+    --gray:#8E9094;        /* Gray — dividers, supporting */
+    --white:#FFFFFF;
+    --black:#1A1A1C;
+    /* accents — punctuate only */
+    --violet:#5A2D82;
+    --wisteria:#D7C6F7;
+    --bloom:#F7F1FF;
+    --sage:#7A9B7E;
+    --meadow:#BAC7B1;
+    /* derived tints */
+    --plum-soft:#efe9ef;
+    --line:#e7e2da;
+    --line-soft:#efeae2;
+    --ink-dim:#6f6a68;
+    --card:#ffffff;
+    --r:14px;
+    --voice:'Libre Baskerville',Georgia,serif;
+    --body:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--body);background:var(--sand);color:var(--charcoal);-webkit-font-smoothing:antialiased;line-height:1.5}
+  a{color:inherit}
+  ::selection{background:var(--wisteria);color:var(--charcoal)}
+ 
+  /* ---------- HERO ---------- */
+  header.hero{
+    position:relative;padding:38px clamp(18px,4vw,54px) 30px;
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,#fffdf9,var(--sand));
+  }
+  .brandmark{
+    font-family:var(--voice);font-size:1.35rem;letter-spacing:-.01em;margin-bottom:26px;
+  }
+  .brandmark .s{color:var(--charcoal)}
+  .brandmark .ai{color:var(--plum)}
+  .hero .eyebrow{
+    font-family:var(--body);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--plum);font-weight:600;display:flex;align-items:center;gap:10px;
+  }
+  .hero .eyebrow::before{content:"";width:24px;height:1.5px;background:var(--plum);display:inline-block}
+  .hero h1{
+    font-family:var(--voice);font-weight:700;font-size:clamp(2.1rem,5.6vw,4rem);
+    line-height:1.02;letter-spacing:-.01em;margin:14px 0 10px;max-width:18ch;color:var(--charcoal);
+  }
+  .hero h1 em{font-style:italic;color:var(--plum);font-weight:400}
+  .hero p.sub{color:var(--ink-dim);max-width:62ch;font-size:clamp(.95rem,1.5vw,1.08rem)}
+  .hero .statrow{display:flex;gap:clamp(20px,4vw,48px);flex-wrap:wrap;margin-top:24px}
+  .hero .statrow .stat{display:flex;flex-direction:column;gap:3px}
+  .hero .statrow .num{font-family:var(--voice);font-size:clamp(1.6rem,3.4vw,2.3rem);font-weight:700;line-height:1;color:var(--plum)}
+  .hero .statrow .lbl{font-family:var(--body);font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gray)}
+ 
+  /* ---------- CONTROLS ---------- */
+  .controls{
+    position:sticky;top:0;z-index:900;background:rgba(255,251,244,.94);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);padding:13px clamp(18px,4vw,54px);
+    display:flex;gap:16px;flex-wrap:wrap;align-items:center;
+  }
+  .ctl-group{display:flex;flex-direction:column;gap:5px}
+  .ctl-group label{font-family:var(--body);font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gray)}
+  select,.pillbtn{
+    font-family:var(--body);font-size:.85rem;font-weight:500;background:var(--white);color:var(--charcoal);
+    border:1px solid var(--line);border-radius:9px;padding:8px 12px;cursor:pointer;transition:border-color .15s,background .15s;
+  }
+  select:hover,.pillbtn:hover{border-color:var(--plum)}
+  select:focus-visible,.pillbtn:focus-visible,.card:focus-visible{outline:2px solid var(--plum);outline-offset:2px}
+  .amenity-filters{display:flex;gap:7px;flex-wrap:wrap}
+  .pillbtn.amenity{padding:6px 13px;font-size:.78rem;font-weight:500;border-radius:100px;color:var(--ink-dim)}
+  .pillbtn.amenity[aria-pressed="true"]{background:var(--plum);color:var(--sand);border-color:var(--plum);font-weight:600}
+  .count-badge{margin-left:auto;font-family:var(--body);font-size:12px;color:var(--ink-dim);display:flex;align-items:center;gap:10px;white-space:nowrap}
+  .count-badge b{color:var(--plum);font-weight:700}
+  .reset{background:none;border:none;color:var(--violet);font-family:var(--body);font-size:11px;font-weight:600;cursor:pointer;text-decoration:underline;padding:0}
+ 
+  /* ---------- LAYOUT ---------- */
+  .board{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:0;height:calc(100vh);min-height:640px}
+  @media (max-width:960px){.board{grid-template-columns:1fr;height:auto}#map{height:58vh;position:sticky;top:118px;z-index:1}}
+  #map{height:100%;background:#eee9e1;z-index:1}
+  .leaflet-container{background:#eee9e1;font-family:var(--body)}
+  .leaflet-popup-content-wrapper{background:var(--white);color:var(--charcoal);border-radius:12px;border:1px solid var(--plum);box-shadow:0 12px 40px rgba(51,52,54,.18)}
+  .leaflet-popup-tip{background:var(--plum)}
+  .leaflet-popup-content{margin:14px 16px;font-family:var(--body)}
+  .pop-name{font-family:var(--voice);font-weight:700;font-size:1.02rem;margin-bottom:3px;color:var(--charcoal)}
+  .pop-hood{font-family:var(--body);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--plum);margin-bottom:8px}
+  .pop-row{font-size:.82rem;color:var(--ink-dim);margin:2px 0}
+  .pop-row b{color:var(--charcoal)}
+  .pop-cta{display:inline-block;margin-top:9px;font-family:var(--body);font-size:11px;font-weight:600;color:var(--sand);background:var(--plum);padding:6px 12px;border-radius:7px;text-decoration:none}
+  .marker-pin{width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid var(--white);box-shadow:0 3px 10px rgba(51,52,54,.3);display:grid;place-items:center}
+  .marker-pin span{transform:rotate(45deg);font-family:var(--body);font-size:10px;font-weight:700;color:#fff}
+  .ferry-marker{background:var(--violet);width:34px;height:34px;border-radius:50%;border:3px solid #fff;display:grid;place-items:center;box-shadow:0 4px 16px rgba(90,45,130,.5);font-size:16px}
+ 
+  /* LIST */
+  .listpane{overflow-y:auto;background:var(--sand);border-left:1px solid var(--line);padding:16px clamp(14px,2vw,20px) 60px}
+  @media (max-width:960px){.listpane{height:auto}}
+  .listpane::-webkit-scrollbar{width:10px}
+  .listpane::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px;border:2px solid var(--sand)}
+ 
+  .card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:14px;overflow:hidden;cursor:pointer;transition:border-color .18s,transform .18s,box-shadow .18s}
+  .card:hover,.card.active{border-color:var(--plum);transform:translateY(-2px);box-shadow:0 14px 30px rgba(51,52,54,.12)}
+  .card.active{border-color:var(--plum);box-shadow:0 0 0 1px var(--plum),0 14px 30px rgba(51,52,54,.14)}
+  .card-photo{height:130px;position:relative;background:linear-gradient(135deg,var(--plum-soft),#f6f1ec);display:grid;place-items:center;overflow:hidden}
+  .card-photo img{width:100%;height:100%;object-fit:cover;display:block}
+  .card-photo .ph-icon{font-family:var(--voice);font-style:italic;color:var(--gray);font-size:.8rem;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;padding:0 12px}
+  .card-photo .ph-icon svg{width:28px;height:28px;opacity:.55}
+  .type-tag{position:absolute;top:10px;left:10px;z-index:2;font-family:var(--body);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,251,244,.9);color:var(--plum);padding:4px 9px;border-radius:6px;backdrop-filter:blur(4px)}
+  .ferry-tag{position:absolute;top:10px;right:10px;z-index:2;font-family:var(--body);font-size:10px;font-weight:600;background:var(--violet);color:#fff;padding:4px 8px;border-radius:6px;display:flex;align-items:center;gap:4px}
+  .card-body{padding:14px 16px 16px}
+  .card-idx{font-family:var(--body);font-size:11px;color:var(--gray);letter-spacing:.06em;font-weight:500}
+  .card h3{font-family:var(--voice);font-weight:700;font-size:1.14rem;line-height:1.12;margin:3px 0 4px;color:var(--charcoal)}
+  .card .hood{font-family:var(--body);font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--plum)}
+  .card .addr{color:var(--ink-dim);font-size:.82rem;margin-top:3px}
+  .metrics{display:flex;gap:20px;margin-top:12px;flex-wrap:wrap}
+  .metric{display:flex;flex-direction:column}
+  .metric .k{font-family:var(--body);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray)}
+  .metric .v{font-family:var(--voice);font-size:1rem;font-weight:700;color:var(--charcoal);margin-top:2px}
+  .amen-icons{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap}
+  .amen{display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--gray);font-family:var(--body);font-weight:500;border:1px solid var(--line);padding:3px 9px;border-radius:6px}
+  .amen.on{color:var(--sage);border-color:var(--meadow);background:#f6f9f5}
+  .amen.on .dot{background:var(--sage)}
+  .amen .dot{width:6px;height:6px;border-radius:50%;background:var(--gray);opacity:.5}
+ 
+  /* DETAIL DRAWER */
+  .drawer-scrim{position:fixed;inset:0;background:rgba(51,52,54,.4);backdrop-filter:blur(2px);z-index:1200;opacity:0;pointer-events:none;transition:opacity .25s}
+  .drawer-scrim.open{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;height:100%;width:min(560px,100%);background:var(--sand);border-left:1px solid var(--plum);z-index:1300;transform:translateX(102%);transition:transform .3s cubic-bezier(.4,0,.2,1);overflow-y:auto;box-shadow:-20px 0 60px rgba(51,52,54,.2)}
+  .drawer.open{transform:translateX(0)}
+  .drawer-hero{height:200px;position:relative;background:linear-gradient(135deg,var(--plum),#4d384d);display:grid;place-items:center}
+  .drawer-hero img{width:100%;height:100%;object-fit:cover}
+  .drawer-hero .ph-icon{color:rgba(255,251,244,.85);font-family:var(--voice);font-style:italic}
+  .drawer-close{position:absolute;top:14px;right:14px;z-index:5;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(51,52,54,.35);color:#fff;font-size:20px;cursor:pointer;display:grid;place-items:center;backdrop-filter:blur(6px)}
+  .drawer-close:hover{background:rgba(51,52,54,.6)}
+  .drawer-body{padding:22px clamp(18px,4vw,28px) 50px}
+  .drawer-body .hood{font-family:var(--body);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--plum)}
+  .drawer-body h2{font-family:var(--voice);font-weight:700;font-size:1.75rem;line-height:1.08;margin:6px 0 5px;color:var(--charcoal)}
+  .drawer-body .addr{color:var(--ink-dim);font-size:.9rem}
+  .keyfacts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0 6px}
+  .keyfact{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+  .keyfact .k{font-family:var(--body);font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gray)}
+  .keyfact .v{font-family:var(--voice);font-size:1.02rem;color:var(--charcoal);margin-top:3px;font-weight:700;line-height:1.2}
+  .dsect{margin-top:24px}
+  .dsect h4{font-family:var(--body);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--plum);padding-bottom:8px;border-bottom:1px solid var(--line);margin-bottom:12px}
+  .drow{display:flex;justify-content:space-between;gap:16px;padding:7px 0;border-bottom:1px solid var(--line-soft);font-size:.88rem}
+  .drow:last-child{border-bottom:none}
+  .drow .dk{color:var(--ink-dim);flex-shrink:0}
+  .drow .dv{color:var(--charcoal);text-align:right;font-weight:500}
+  .drow .dv.na{color:var(--gray);font-style:italic;font-weight:400}
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{font-family:var(--body);font-size:.72rem;background:var(--white);border:1px solid var(--line);color:var(--ink-dim);padding:5px 11px;border-radius:100px}
+  .spaces-tbl{width:100%;border-collapse:collapse;font-size:.82rem}
+  .spaces-tbl th{font-family:var(--body);font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+  .spaces-tbl td{padding:7px 8px;border-bottom:1px solid var(--line-soft);color:var(--charcoal)}
+  .spaces-tbl tr:last-child td{border-bottom:none}
+  .drawer-cta{display:inline-flex;align-items:center;gap:8px;margin-top:22px;background:var(--plum);color:var(--sand);font-weight:600;font-size:.9rem;padding:12px 20px;border-radius:10px;text-decoration:none;font-family:var(--body);transition:background .15s}
+  .drawer-cta:hover{background:#553c55}
+  .drawer-cta.ghost{background:transparent;border:1px solid var(--line);color:var(--charcoal);margin-left:8px}
+  .drawer-cta.ghost:hover{border-color:var(--plum)}
+  .source-note{font-family:var(--body);font-size:11px;color:var(--gray);margin-top:18px;line-height:1.6}
+ 
+  /* FOOTER */
+  footer{padding:40px clamp(18px,4vw,54px);border-top:1px solid var(--line);background:var(--sand);color:var(--ink-dim);font-size:.82rem;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:flex-start}
+  footer .fnote{max-width:54ch;line-height:1.6}
+  footer b{color:var(--charcoal);font-weight:600}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-family:var(--body);font-size:11px;font-weight:500}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .legend .sw{width:12px;height:12px;border-radius:3px}
+  .empty{text-align:center;padding:60px 20px;color:var(--gray);font-family:var(--voice);font-style:italic;font-size:1.1rem}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+ 
+<header class="hero">
+  <div class="brandmark"><span class="s">sapience</span> <span class="ai">ai</span></div>
+  <div class="eyebrow">Office Search &nbsp;·&nbsp; Downtown Seattle</div>
+  <h1>Where the team <em>lands</em> next.</h1>
+  <p class="sub">Thirteen spaces across Belltown, Pioneer Square, the CBD, and the Pike Market waterfront — mapped, compared, and measured by walk to the Colman Dock ferry terminal. Click a pin or a card to dig in.</p>
+  <div class="statrow">
+    <div class="stat"><span class="num" id="stat-count">13</span><span class="lbl">Spaces tracked</span></div>
+    <div class="stat"><span class="num" id="stat-hoods">6</span><span class="lbl">Neighborhoods</span></div>
+    <div class="stat"><span class="num">0.14–1.05</span><span class="lbl">Miles to ferry</span></div>
+  </div>
+</header>
+ 
+<div class="controls" id="controls">
+  <div class="ctl-group">
+    <label for="sortSel">Sort</label>
+    <select id="sortSel">
+      <option value="ferry">Nearest ferry</option>
+      <option value="price">Price (low to high)</option>
+      <option value="size">Size (small to large)</option>
+      <option value="hood">Neighborhood (A to Z)</option>
+      <option value="name">Name (A to Z)</option>
+    </select>
+  </div>
+  <div class="ctl-group">
+    <label for="hoodSel">Neighborhood</label>
+    <select id="hoodSel"><option value="">All neighborhoods</option></select>
+  </div>
+  <div class="ctl-group">
+    <label>Must have</label>
+    <div class="amenity-filters" id="amenFilters">
+      <button class="pillbtn amenity" data-amen="gym" aria-pressed="false">Gym</button>
+      <button class="pillbtn amenity" data-amen="bike_storage" aria-pressed="false">Bike</button>
+      <button class="pillbtn amenity" data-amen="kitchen" aria-pressed="false">Kitchen</button>
+      <button class="pillbtn amenity" data-amen="parking" aria-pressed="false">Parking</button>
+      <button class="pillbtn amenity" data-amen="private_offices" aria-pressed="false">Private offices</button>
+      <button class="pillbtn amenity" data-amen="ferry" aria-pressed="false">Half-mile to ferry</button>
+    </div>
+  </div>
+  <div class="count-badge">
+    <span><b id="visCount">13</b> of 13 shown</span>
+    <button class="reset" id="resetBtn">reset</button>
+  </div>
+</div>
+ 
+<div class="board">
+  <div id="map" role="application" aria-label="Map of available office spaces in downtown Seattle"></div>
+  <div class="listpane" id="listpane"></div>
+</div>
+ 
+<footer>
+  <div class="fnote">
+    <b>How to read this.</b> Rates aren't directly comparable: coworking is all-in per month, NNN excludes operating costs, full-service includes them. <b>"Contact"</b> means the source didn't publish a rate. Data pulled July 19, 2026 — verify current figures with the listing broker before acting. Photos link to the source listing; swap in local images under <b>/images</b> anytime.
+  </div>
+  <div class="legend">
+    <span><span class="sw" style="background:#674C67"></span> Office / lease</span>
+    <span><span class="sw" style="background:#7A9B7E"></span> Coworking / flex</span>
+    <span><span class="sw" style="background:#5A2D82"></span> Ferry terminal</span>
+  </div>
+</footer>
+ 
+<div class="drawer-scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Space details"></aside>
+ 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+const DATA = {
+  "meta": {
+    "title": "Seattle Office Space Comparison",
+    "prepared_for": "Sapience AI",
+    "data_pulled": "2026-07-19",
+    "note": "Rents, availability, and terms change frequently \u2014 verify with the listing broker before acting. Rate types are not directly comparable: coworking/flex rates are all-in per month or per SF with services; NNN excludes operating expenses; FS (full service) includes them. Null means the source did not publish that value.",
+    "count": 13
+  },
+  "properties": [
+    {
+      "id": "labour-temple",
+      "name": "Labour Temple",
+      "address": "2800 1st Ave, Seattle, WA 98121",
+      "neighborhood": "Belltown",
+      "type": "Coworking",
+      "operator": "FAUL LLC",
+      "broker": null,
+      "price_per_sf": "$128\u2013$167/SF/YR ($10.70\u2013$13.90/SF/MO)",
+      "available_sf": "14 suites, 133\u2013575 SF each",
+      "monthly_cost": "$1,599\u2013$6,446/MO; private offices from $1,600/MO",
+      "building_size": null,
+      "year_built": null,
+      "private_offices": "Yes \u2014 offices support up to 24 people; suites can be combined",
+      "kitchen": "Yes \u2014 communal kitchen; coffee service",
+      "gym": "Yes \u2014 fitness center with dry sauna and showers",
+      "bike_storage": "Yes",
+      "parking": null,
+      "meeting_rooms": "10 conference/meeting rooms",
+      "amenities": [
+        "Rooftop terrace",
+        "Interior courtyard",
+        "Phone booths",
+        "Mail service",
+        "Lockers",
+        "Keyless entry",
+        "On-site management",
+        "24-hr access",
+        "Operable windows",
+        "Curated art"
+      ],
+      "scores": {
+        "walk": 100,
+        "transit": 100,
+        "bike": 80
+      },
+      "source_url": "https://www.loopnet.com/Listing/2800-1st-Ave-Seattle-WA/33332812/",
+      "spaces": [
+        {
+          "suite": "2nd Fl 201",
+          "size": "230 SF",
+          "price_per_sf_yr": "$135.60",
+          "monthly": "$2,599"
+        },
+        {
+          "suite": "2nd Fl 209",
+          "size": "575 SF",
+          "price_per_sf_yr": "$134.52",
+          "monthly": "$6,446"
+        },
+        {
+          "suite": "3rd Fl 301",
+          "size": "145 SF",
+          "price_per_sf_yr": "$132.36",
+          "monthly": "$1,599"
+        },
+        {
+          "suite": "3rd Fl 312",
+          "size": "455 SF",
+          "price_per_sf_yr": "$141.12",
+          "monthly": "$5,351"
+        },
+        {
+          "suite": "3rd Fl 321",
+          "size": "133 SF",
+          "price_per_sf_yr": "$144.36",
+          "monthly": "$1,600"
+        }
+      ],
+      "lat": 47.6156,
+      "lng": -122.3506,
+      "ferry_mi": 1.05
+    },
+    {
+      "id": "journal-of-commerce",
+      "name": "Journal of Commerce Bldg",
+      "address": "81-85 Columbia St, Seattle, WA 98104",
+      "neighborhood": "Pioneer Square",
+      "type": "Retail / creative office",
+      "operator": null,
+      "broker": "Kidder Mathews (Steve & Zeke Pelluer)",
+      "price_per_sf": "$19.50/SF/YR ($1.63/SF/MO)",
+      "available_sf": "1,913\u20136,613 SF (Ste 81: 4,700 SF retail; Ste 303: 1,913 SF office, fits 5\u201316)",
+      "monthly_cost": "$3,109/MO (Ste 303) \u2013 $7,638/MO (Ste 81)",
+      "building_size": "40,000 SF, 4 stories, Class C",
+      "year_built": "1910 (renovated 2009)",
+      "private_offices": null,
+      "kitchen": null,
+      "gym": null,
+      "bike_storage": null,
+      "parking": "Not listed; loading access from Western Ave",
+      "meeting_rooms": null,
+      "amenities": [
+        "20-ft ceilings",
+        "Floor-to-ceiling storefront windows",
+        "Exposed brick",
+        "Timber beams",
+        "Elliott Bay views",
+        "1 block from ferry terminal"
+      ],
+      "scores": {
+        "walk": 100,
+        "transit": 100,
+        "bike": 50
+      },
+      "source_url": "https://www.loopnet.com/Listing/81-85-Columbia-St-Seattle-WA/39711766/",
+      "spaces": [
+        {
+          "suite": "1st Fl 81",
+          "size": "4,700 SF",
+          "price_per_sf_yr": "$19.50",
+          "monthly": "$7,638",
+          "use": "Retail"
+        },
+        {
+          "suite": "3rd Fl 303",
+          "size": "1,913 SF",
+          "price_per_sf_yr": "$19.50",
+          "monthly": "$3,109",
+          "use": "Office",
+          "fits": "5\u201316"
+        }
+      ],
+      "lat": 47.6027,
+      "lng": -122.3358,
+      "ferry_mi": 0.14
+    },
+    {
+      "id": "pacific-bldg",
+      "name": "Pacific Bldg",
+      "address": "720 3rd Ave, Seattle, WA 98104",
+      "neighborhood": "Downtown",
+      "type": "Office sublease",
+      "operator": null,
+      "broker": "Cushman & Wakefield (Ellen Akopyan)",
+      "price_per_sf": "$20.00\u2013$22.00/SF/YR ($1.67\u2013$1.83/SF/MO)",
+      "available_sf": "1,026\u20138,530 SF across 4 suites on the 16th floor",
+      "monthly_cost": "$1,710\u2013$8,074/MO",
+      "building_size": "138,545 SF, 23 stories, Class B",
+      "year_built": "1971 (renovated 2014)",
+      "private_offices": "Suite-dependent (sublease build-outs)",
+      "kitchen": null,
+      "gym": "Yes \u2014 fitness center",
+      "bike_storage": "Yes",
+      "parking": "158 covered @ $265/mo; 60 reserved @ $335/mo; surface & tandem options",
+      "meeting_rooms": null,
+      "amenities": [
+        "Controlled access",
+        "Security system",
+        "Shower facilities",
+        "12-ft unfinished ceilings"
+      ],
+      "scores": {
+        "walk": 100,
+        "transit": 100,
+        "bike": 50
+      },
+      "source_url": "https://www.loopnet.com/Listing/720-3rd-Ave-Seattle-WA/39432541/",
+      "spaces": [
+        {
+          "suite": "1600",
+          "size": "1,921 SF",
+          "price_per_sf_yr": "$20.00",
+          "monthly": "$3,202",
+          "fits": "5\u201316"
+        },
+        {
+          "suite": "1605",
+          "size": "1,026 SF",
+          "price_per_sf_yr": "$20.00",
+          "monthly": "$1,710",
+          "fits": "3\u20139"
+        },
+        {
+          "suite": "1607",
+          "size": "1,179 SF",
+          "price_per_sf_yr": "$20.00",
+          "monthly": "$1,965",
+          "fits": "3\u201310"
+        },
+        {
+          "suite": "1610",
+          "size": "4,404 SF",
+          "price_per_sf_yr": "$22.00",
+          "monthly": "$8,074",
+          "fits": "12\u201336"
+        }
+      ],
+      "lat": 47.6032,
+      "lng": -122.3308,
+      "ferry_mi": 0.37
+    },
+    {
+      "id": "columbia-center",
+      "name": "Columbia Center",
+      "address": "701 5th Ave, Seattle, WA 98104",
+      "neighborhood": "Downtown",
+      "type": "Coworking / direct lease",
+      "operator": "Regus (coworking); Gaw Capital (owner)",
+      "broker": "CBRE (direct lease)",
+      "price_per_sf": "Regus: $26.00/SF/YR ($2.17/SF/MO). Direct building lease: contact CBRE",
+      "available_sf": "Regus suite 100\u20135,000 SF (fits 1\u201318); building floor plates 13,000\u201324,000 RSF",
+      "monthly_cost": "Regus from ~$10,833/MO (full 5,000 SF); smaller offices priced per seat",
+      "building_size": "76-story tower",
+      "year_built": null,
+      "private_offices": "Yes \u2014 fully furnished (Regus)",
+      "kitchen": "Business lounge; 25+ on-site restaurants/retail in tower",
+      "gym": "Yes \u2014 building fitness center (Precor, locker room, showers, towel service); free gym membership via Regus",
+      "bike_storage": "Yes",
+      "parking": "6 underground levels, 700+ spaces, connected to main lobby",
+      "meeting_rooms": "Yes (Regus)",
+      "amenities": [
+        "360\u00b0 views",
+        "Columbia Tower Club (fl 75\u201376)",
+        "LEED Platinum",
+        "Energy Star 91",
+        "Wired Certified Platinum",
+        "Atrium",
+        "Dry cleaner",
+        "24-hr access"
+      ],
+      "scores": {
+        "walk": 100,
+        "transit": 100,
+        "bike": 50
+      },
+      "source_url": "https://www.loopnet.com/Listing/701-5th-Ave-Seattle-WA/4439423/",
+      "additional_source_url": "https://columbiacenterseattle.com/",
+      "spaces": [],
+      "lat": 47.6045,
+      "lng": -122.3301,
+      "ferry_mi": 0.42
+    },
+    {
+      "id": "pioneer-building",
+      "name": "Expansive Pioneer Building",
+      "address": "600 1st Ave, Seattle, WA 98104",
+      "neighborhood": "Pioneer Square",
+      "type": "Coworking / flex",
+      "operator": "Expansive",
+      "broker": null,
+      "price_per_sf": "$32\u2013$113/SF/YR ($2.71\u2013$9.42/SF/MO) depending on size/type",
+      "available_sf": "30 spaces, 1 SF (virtual) to 1,650 SF team suites",
+      "monthly_cost": "Coworking $148.75/MO; dedicated desk $329.58/MO; private offices $531.68\u2013$1,049/MO; team suites $1,447\u2013$4,538/MO",
+      "building_size": null,
+      "year_built": "1892",
+      "private_offices": "Yes \u2014 1\u201324 person offices and team suites (up to 3 private offices per suite)",
+      "kitchen": "Yes \u2014 community kitchen + private kitchens in team suites",
+      "gym": null,
+      "bike_storage": "Yes",
+      "parking": null,
+      "meeting_rooms": "Yes \u2014 conference rooms",
+      "amenities": [
+        "Fully furnished",
+        "High-speed internet",
+        "Phone booths",
+        "Print/copy",
+        "Mail service",
+        "High ceilings",
+        "Natural light",
+        "Coffee/tea",
+        "24/7 access (dedicated desks)"
+      ],
+      "scores": null,
+      "source_url": "https://www.loopnet.com/Listing/600-1st-Ave-Seattle-WA/16792583/",
+      "spaces": [
+        {
+          "suite": "Coworking membership",
+          "size": null,
+          "monthly": "$148.75",
+          "fits": "1"
+        },
+        {
+          "suite": "Dedicated desk",
+          "size": null,
+          "monthly": "$329.58",
+          "fits": "1"
+        },
+        {
+          "suite": "1-2 person office",
+          "size": "90 SF",
+          "monthly": "$531.68",
+          "fits": "1\u20132"
+        },
+        {
+          "suite": "Team suite 200A",
+          "size": "725 SF",
+          "monthly": "$3,478",
+          "fits": "8\u201310"
+        },
+        {
+          "suite": "Team suite 200B",
+          "size": "1,650 SF",
+          "monthly": "$4,538",
+          "fits": "1\u201324"
+        }
+      ],
+      "lat": 47.6019,
+      "lng": -122.334,
+      "ferry_mi": 0.23
+    },
+    {
+      "id": "smith-tower",
+      "name": "Smith Tower",
+      "address": "506 2nd Ave, Seattle, WA 98104",
+      "neighborhood": "Pioneer Square",
+      "type": "Office (Class A, historic)",
+      "operator": null,
+      "broker": "Damon McCartney & Lauren Hallgrimson",
+      "price_per_sf": null,
+      "available_sf": "From 536 SF boutique suites to full & multi-floor; 33 floors of office; Tower Suites ~2,200 SF full-floor",
+      "monthly_cost": null,
+      "building_size": "42-story historic tower, 33 floors of office",
+      "year_built": null,
+      "private_offices": "Yes \u2014 each Tower Suite has 4 corner offices + private restroom + elevator exposure",
+      "kitchen": "Tenant lounge (no stated kitchen)",
+      "gym": "Yes \u2014 tenant fitness center with showers",
+      "bike_storage": "Yes",
+      "parking": "1/1,000 RSF ratio in nearby garage",
+      "meeting_rooms": "Building conference room (free to tenants)",
+      "amenities": [
+        "22nd-floor roof deck w/ fire pit & lounge",
+        "Operable windows",
+        "24-hr security",
+        "On-site management",
+        "Upgraded seismic/HVAC/telecom",
+        "Elliott Bay & mountain views"
+      ],
+      "scores": {
+        "walk": 98,
+        "transit": 100,
+        "bike": null
+      },
+      "source_url": "https://www.smithtower.com/leasing/",
+      "spaces": [],
+      "lat": 47.6021,
+      "lng": -122.332,
+      "ferry_mi": 0.31
+    },
+    {
+      "id": "qualtrics-tower",
+      "name": "Qualtrics Tower 2+U",
+      "address": "1201 2nd Avenue, Seattle, WA 98101",
+      "neighborhood": "Downtown",
+      "type": "Office sublease",
+      "operator": null,
+      "broker": "CBRE (Joe Riley, Tony Ford)",
+      "price_per_sf": null,
+      "available_sf": "7,232\u201344,816 SF \u2014 full floors 19 (7,232), 23 (18,792), 27 (18,792)",
+      "monthly_cost": null,
+      "building_size": null,
+      "year_built": null,
+      "lease_term": "Up to 5-year sublease; available immediately",
+      "private_offices": "Furnished floors (configurable)",
+      "kitchen": null,
+      "gym": "Yes \u2014 fitness and yoga studio",
+      "bike_storage": "Yes \u2014 bike club, storage & service stations",
+      "parking": "Efficient parking, valet services, EV charging",
+      "meeting_rooms": "Multiple event spaces",
+      "amenities": [
+        "24,000 SF covered outdoor open space",
+        "Tenant view deck",
+        "~10-ft perimeter drop ceiling",
+        "Concierge-style management",
+        "Unobstructed views",
+        "Plug-and-play / fully furnished"
+      ],
+      "scores": null,
+      "source_url": "https://www.cbre.com/properties/properties-for-lease/office/details/US-SMPL-85173/qualtrics-tower-2u-1201-2nd-avenue-seattle-wa-98101",
+      "spaces": [
+        {
+          "suite": "Floor 19",
+          "size": "7,232 SF",
+          "use": "Office (furnished)"
+        },
+        {
+          "suite": "Floor 23",
+          "size": "18,792 SF"
+        },
+        {
+          "suite": "Floor 27",
+          "size": "18,792 SF"
+        }
+      ],
+      "lat": 47.6055,
+      "lng": -122.3355,
+      "ferry_mi": 0.24
+    },
+    {
+      "id": "securities-bldg",
+      "name": "The Securities Building",
+      "address": "1904 3rd Ave, Seattle, WA 98101",
+      "neighborhood": "Belltown",
+      "type": "Office (full service)",
+      "operator": null,
+      "broker": "Cushman & Wakefield (Brandon Burmeister, Leah Masson)",
+      "price_per_sf": "Mostly negotiable; some suites $35.00/SF/YR (full service)",
+      "available_sf": "44 spaces, ~62,010 SF total; suites from 260 SF to 6,913 SF",
+      "monthly_cost": null,
+      "building_size": "230,000 SF, 10 floors, Class C, multi-tenant",
+      "year_built": "1917",
+      "private_offices": "Full build-out suites (multi-tenant)",
+      "kitchen": null,
+      "gym": null,
+      "bike_storage": null,
+      "parking": "230 spaces, ratio 1.00/1,000 SF",
+      "meeting_rooms": null,
+      "amenities": [],
+      "scores": {
+        "walk": 99,
+        "transit": 100,
+        "bike": 81
+      },
+      "source_url": "https://www.commercialcafe.com/commercial-property/us/wa/seattle/securities-bldg/",
+      "spaces": [],
+      "lat": 47.611,
+      "lng": -122.3406,
+      "ferry_mi": 0.58
+    },
+    {
+      "id": "decatur-bldg",
+      "name": "The Decatur Building",
+      "address": "1511 6th Avenue, Seattle, WA 98101",
+      "neighborhood": "Central Business District",
+      "type": "Creative office (NNN)",
+      "operator": null,
+      "broker": "Kidder Mathews (Dan Dahl, David Gurry)",
+      "price_per_sf": "$19.00/SF/YR (NNN)",
+      "available_sf": "3 spaces, ~47,849 SF total; 4,424 / 21,686 / 21,739 SF",
+      "monthly_cost": null,
+      "building_size": "72,213 SF, Class B, multi-tenant",
+      "year_built": "1921",
+      "lease_term": "Suite #400: 1\u20133 years; can be divided, short-term OK",
+      "private_offices": "Creative build-outs (divisible)",
+      "kitchen": null,
+      "gym": null,
+      "bike_storage": null,
+      "parking": "Not on building; nearby Century Square Garage & Midtown Parking (~0.1 mi)",
+      "meeting_rooms": null,
+      "amenities": [],
+      "scores": {
+        "walk": 99,
+        "transit": 100,
+        "bike": 80
+      },
+      "source_url": "https://www.commercialcafe.com/commercial-property/us/wa/seattle/the-decatur-building/",
+      "spaces": [
+        {
+          "suite": "#200",
+          "size": "4,424 SF",
+          "price_per_sf_yr": "$19.00",
+          "lease_type": "NNN"
+        },
+        {
+          "suite": "#300",
+          "size": "21,686 SF",
+          "price_per_sf_yr": "$19.00",
+          "lease_type": "NNN"
+        },
+        {
+          "suite": "#400",
+          "size": "21,739 SF",
+          "price_per_sf_yr": "$19.00",
+          "lease_type": "NNN"
+        }
+      ],
+      "lat": 47.6118,
+      "lng": -122.3355,
+      "ferry_mi": 0.65
+    },
+    {
+      "id": "belltown-collective",
+      "name": "The Belltown Collective",
+      "address": "2231 1st Ave, Seattle, WA 98121",
+      "neighborhood": "Belltown",
+      "type": "Creative office / retail (NNN)",
+      "operator": null,
+      "broker": "Orion Commercial Partners (Dan Foster, Matthew Hinrichs)",
+      "price_per_sf": "$10.00/SF/YR (sublease); direct ~$271/SF price + $19.50/SF NNN",
+      "available_sf": "6 spaces, ~34,600 SF total; Basement 5,324 SF, Lower 5,700 SF, Main 6,276 SF",
+      "monthly_cost": null,
+      "building_size": "17,300 SF",
+      "year_built": "1909",
+      "private_offices": "Open creative floors",
+      "kitchen": null,
+      "gym": null,
+      "bike_storage": null,
+      "parking": "Not listed; nearby Republic Parking NW (~0.06 mi), Diamond Parking (~0.14 mi)",
+      "meeting_rooms": null,
+      "amenities": [
+        "High ceilings",
+        "Hard-surface floors",
+        "Sprinklered basement",
+        "Two blocks from The Crocodile"
+      ],
+      "scores": {
+        "walk": 97,
+        "transit": 100,
+        "bike": 63
+      },
+      "source_url": "https://www.commercialcafe.com/commercial-property/us/wa/seattle/the-belltown-collective/",
+      "spaces": [
+        {
+          "suite": "Basement",
+          "size": "5,324 SF",
+          "price_per_sf_yr": "$10.00",
+          "lease_type": "NNN sublease"
+        },
+        {
+          "suite": "Lower Level",
+          "size": "5,700 SF",
+          "price_per_sf_yr": "$10.00",
+          "lease_type": "NNN sublease"
+        },
+        {
+          "suite": "Main Level",
+          "size": "6,276 SF",
+          "price_per_sf_yr": "$10.00",
+          "lease_type": "NNN sublease"
+        }
+      ],
+      "lat": 47.6132,
+      "lng": -122.3465,
+      "ferry_mi": 0.81
+    },
+    {
+      "id": "terminal-sales",
+      "name": "Terminal Sales Building",
+      "address": "1932 1st Avenue, Seattle, WA 98101",
+      "neighborhood": "Pike Place Market",
+      "type": "Office",
+      "operator": null,
+      "broker": "Martin Smith (Ryan Smith, Daniel Bucher)",
+      "price_per_sf": "$37.00\u2013$39.00/SF/YR (avg ~$38.00)",
+      "available_sf": "2 spaces, 7,791 SF total; Ste 219: 5,903 SF (divisible from 3,617), Ste 620: 1,888 SF",
+      "monthly_cost": null,
+      "building_size": "90,778 SF, Class B, multi-tenant, LEED Gold",
+      "year_built": "1923",
+      "private_offices": "Full build-out suites",
+      "kitchen": null,
+      "gym": null,
+      "bike_storage": null,
+      "parking": "Not listed; nearby Trust Parking (~0.08 mi), Upark (~0.09 mi)",
+      "meeting_rooms": null,
+      "amenities": [],
+      "scores": {
+        "walk": 98,
+        "transit": 100,
+        "bike": 61
+      },
+      "source_url": "https://www.commercialcafe.com/commercial-property/us/wa/seattle/terminal-sales-building/",
+      "spaces": [
+        {
+          "suite": "#219",
+          "size": "5,903 SF",
+          "price_per_sf_yr": "$37.00",
+          "note": "divisible from 3,617 SF"
+        },
+        {
+          "suite": "#620",
+          "size": "1,888 SF",
+          "price_per_sf_yr": "$39.00"
+        }
+      ],
+      "lat": 47.6112,
+      "lng": -122.3421,
+      "ferry_mi": 0.61
+    },
+    {
+      "id": "pioneer-collective",
+      "name": "The Pioneer Collective",
+      "address": "92 Lenora Street, Seattle, WA 98121",
+      "neighborhood": "Belltown",
+      "type": "Coworking / flex",
+      "operator": "The Pioneer Collective",
+      "broker": null,
+      "phone": "(206) 317-8074",
+      "price_per_sf": null,
+      "available_sf": "Offices for teams of 1\u201312+; 15 new private offices opening Aug 1, 2026",
+      "monthly_cost": "Small (1\u20132 desks) $945\u2013$1,500; Medium (3\u20136) $1,500\u2013$3,900; Large (7\u201310) $4,000+; XL (11+) $6,750+",
+      "building_size": null,
+      "year_built": null,
+      "private_offices": "Yes \u2014 furnished (wood desks, Herman Miller/Knoll chairs, task lamps, locking cabinets)",
+      "kitchen": "Free coffee, tea, beverages; lounge/dining area",
+      "gym": "Not offered (showers available)",
+      "bike_storage": "Yes \u2014 plus showers",
+      "parking": null,
+      "meeting_rooms": "Conference-room allotment + discounted rentals",
+      "amenities": [
+        "1 Gbps fiber",
+        "24/7 access",
+        "On-site staff/community manager",
+        "Business address & mail",
+        "Printing/scanning",
+        "Phone booths",
+        "Signage",
+        "Global LExC network access"
+      ],
+      "scores": null,
+      "source_url": "https://www.thepioneercollective.com/offices-seattle-belltown",
+      "spaces": [
+        {
+          "tier": "Small",
+          "desks": "1\u20132",
+          "memberships": "2\u20133",
+          "monthly": "$945 \u2013 $1,500"
+        },
+        {
+          "tier": "Medium",
+          "desks": "3\u20136",
+          "memberships": "5\u20139",
+          "monthly": "$1,500 \u2013 $3,900"
+        },
+        {
+          "tier": "Large",
+          "desks": "7\u201310",
+          "memberships": "10\u201315",
+          "monthly": "$4,000 and up"
+        },
+        {
+          "tier": "XL",
+          "desks": "11+",
+          "memberships": "16+",
+          "monthly": "$6,750 and up"
+        }
+      ],
+      "lat": 47.6135,
+      "lng": -122.3437,
+      "ferry_mi": 0.78
+    },
+    {
+      "id": "8th-and-olive",
+      "name": "8th & Olive",
+      "address": "720 Olive Way, Seattle, WA 98101",
+      "neighborhood": "Downtown / CBD",
+      "type": "Office",
+      "operator": "Owner: Morgan Stanley; Property mgmt: Unico Properties",
+      "broker": "Colliers International (David Abbott, Greg Inglin, Connor McClain)",
+      "price_per_sf": null,
+      "available_sf": null,
+      "monthly_cost": null,
+      "building_size": "304,751 SF rentable, 20 stories; typical floorplate 15,721 SF; ceilings 12'4\"\u201316'",
+      "year_built": "1981 (renovated 2015)",
+      "private_offices": "Tenant build-outs (not specified)",
+      "kitchen": "On-site coffee shop (no tenant kitchen specified)",
+      "gym": null,
+      "bike_storage": "Yes",
+      "parking": "Subterranean 4-level structure, 212 stalls; ratio 1/1,400 SF; $350.00/stall/month",
+      "meeting_rooms": "New building conference facility",
+      "building_hours": "Mon\u2013Fri 7:00am\u20136:00pm; Sat 8:00am\u201312:00pm",
+      "transportation": "Perfect 100 Transit Score; Convention Place Transit Center 1 block away; easy I-5 & Hwy 99 access",
+      "amenities": [
+        "7 upgraded Westinghouse elevators",
+        "Key-card access",
+        "IP camera security",
+        "Fully sprinklered",
+        "BAS-controlled HVAC",
+        "5 W/SF electrical (expandable to 10)",
+        "Comcast/Integra/TW Telecom"
+      ],
+      "scores": {
+        "walk": null,
+        "transit": 100,
+        "bike": null
+      },
+      "source_url": null,
+      "source_note": "Colliers International fact sheet (8th & Olive)",
+      "spaces": [],
+      "lat": 47.6128,
+      "lng": -122.3348,
+      "ferry_mi": 0.72
+    }
+  ]
+};
+const props = DATA.properties;
+const FERRY = {lat:47.6027, lng:-122.3387};
+ 
+const isCoworking = p => /cowork|flex/i.test(p.type);
+const markerColor = p => isCoworking(p) ? '#7A9B7E' : '#674C67';
+const has = (p,key) => {
+  if(key==='ferry') return p.ferry_mi<=0.5;
+  const v=p[key];
+  return v!==null && v!==undefined && !/^not\b|^no\b|^n\/a/i.test(String(v));
+};
+function sizeKey(p){const m=(p.available_sf||'').replace(/,/g,'').match(/(\d+)\s*SF/i);return m?+m[1]:Infinity;}
+function priceKey(p){const s=p.price_per_sf||'';const m=s.replace(/,/g,'').match(/\$(\d+(?:\.\d+)?)/);return m?+m[1]:Infinity;}
+const esc = s => String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+ 
+let state={sort:'ferry', hood:'', amens:new Set(), active:null};
+ 
+// ---- map (resilient) ----
+let map=null, markers={}, mapOK=false;
+try{
+  if(typeof L==='undefined') throw new Error('Leaflet not loaded');
+  map=L.map('map',{zoomControl:true,scrollWheelZoom:true}).setView([47.6075,-122.3385],14);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
+    attribution:'&copy; OpenStreetMap &copy; CARTO',maxZoom:20
+  }).addTo(map);
+  mapOK=true;
+}catch(err){
+  console.warn('Map unavailable:',err);
+  const mapEl=document.getElementById('map');
+  if(mapEl) mapEl.innerHTML='<div style="height:100%;display:grid;place-items:center;text-align:center;color:var(--gray);font-family:var(--voice);font-style:italic;padding:24px">Map could not load.<br>The list still works — click any card for details.</div>';
+}
+ 
+if(mapOK){
+L.marker([FERRY.lat,FERRY.lng],{icon:L.divIcon({className:'',html:'<div class="ferry-marker">⛴</div>',iconSize:[34,34],iconAnchor:[17,17]}),zIndexOffset:500})
+ .addTo(map).bindPopup('<div class="pop-name">Colman Dock</div><div class="pop-hood">Ferry Terminal</div><div class="pop-row">Washington State Ferries — the reference point for every walk time on this board.</div>');
+ 
+props.forEach((p,i)=>{
+  const col=markerColor(p);
+  const icon=L.divIcon({className:'',iconSize:[26,26],iconAnchor:[13,26],popupAnchor:[0,-24],
+    html:`<div class="marker-pin" style="background:${col}"><span>${i+1}</span></div>`});
+  const m=L.marker([p.lat,p.lng],{icon}).addTo(map);
+  m.bindPopup(popupHTML(p,i));
+  m.on('click',()=>{highlightCard(p.id); scrollToCard(p.id);});
+  markers[p.id]=m;
+});
+} // end if(mapOK)
+ 
+function popupHTML(p,i){
+  return `<div class="pop-name">${i+1}. ${esc(p.name)}</div>
+    <div class="pop-hood">${esc(p.neighborhood)}</div>
+    <div class="pop-row"><b>Rate:</b> ${esc(p.price_per_sf||'Contact broker')}</div>
+    <div class="pop-row"><b>Ferry:</b> ${p.ferry_mi} mi walk</div>
+    <a class="pop-cta" href="#" onclick="openDrawer('${p.id}');return false;">View details →</a>`;
+}
+ 
+const listpane=document.getElementById('listpane');
+function amenState(p){
+  return [['gym','Gym',has(p,'gym')],['bike','Bike',has(p,'bike_storage')],['kitchen','Kitchen',has(p,'kitchen')],['parking','Parking',has(p,'parking')]];
+}
+function cardHTML(p,idx){
+  const photo = p.image
+    ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+       <div class="ph-icon" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>Photo via listing</div>`
+    : `<div class="ph-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>Photos on source listing</div>`;
+  const ferryClose = p.ferry_mi<=0.5;
+  return `<article class="card" tabindex="0" data-id="${p.id}" role="button" aria-label="${esc(p.name)} details">
+    <div class="card-photo">
+      <span class="type-tag">${isCoworking(p)?'Coworking':'Office'}</span>
+      ${ferryClose?`<span class="ferry-tag">⛴ ${p.ferry_mi}mi</span>`:''}
+      ${photo}
+    </div>
+    <div class="card-body">
+      <div class="card-idx">${String(idx+1).padStart(2,'0')} — ${p.ferry_mi} mi to ferry</div>
+      <div class="hood">${esc(p.neighborhood)}</div>
+      <h3>${esc(p.name)}</h3>
+      <div class="addr">${esc(p.address)}</div>
+      <div class="metrics">
+        <div class="metric"><span class="k">Rate</span><span class="v">${esc(shortRate(p))}</span></div>
+        <div class="metric"><span class="k">Available</span><span class="v">${esc(shortSize(p))}</span></div>
+      </div>
+      <div class="amen-icons">
+        ${amenState(p).map(([k,label,on])=>`<span class="amen ${on?'on':''}"><span class="dot"></span>${label}</span>`).join('')}
+      </div>
+    </div>
+  </article>`;
+}
+function shortRate(p){
+  if(!p.price_per_sf) return 'Contact';
+  const m=p.price_per_sf.match(/\$[\d.,]+(?:–\$[\d.,]+)?\/SF\/YR/);
+  if(m) return m[0].replace('/SF/YR','/SF');
+  const mo=p.price_per_sf.match(/\$[\d.,]+/);
+  return mo?mo[0]+'…':'Contact';
+}
+function shortSize(p){
+  if(!p.available_sf) return '—';
+  const m=p.available_sf.match(/[\d,]+(?:–[\d,]+)?\s*SF/);
+  return m?m[0]:(p.available_sf.length>22?p.available_sf.slice(0,20)+'…':p.available_sf);
+}
+function applyFilters(){
+  let list=props.filter(p=>{
+    if(state.hood && p.neighborhood!==state.hood) return false;
+    for(const a of state.amens){
+      if(a==='ferry'){ if(p.ferry_mi>0.5) return false; }
+      else if(a==='private_offices'){ if(!has(p,'private_offices')) return false; }
+      else if(!has(p,a)) return false;
+    }
+    return true;
+  });
+  const s=state.sort;
+  list.sort((a,b)=>{
+    if(s==='ferry') return a.ferry_mi-b.ferry_mi;
+    if(s==='price') return priceKey(a)-priceKey(b);
+    if(s==='size')  return sizeKey(a)-sizeKey(b);
+    if(s==='hood')  return a.neighborhood.localeCompare(b.neighborhood)||a.ferry_mi-b.ferry_mi;
+    if(s==='name')  return a.name.localeCompare(b.name);
+    return 0;
+  });
+  render(list);
+}
+function render(list){
+  const shownIds=new Set(list.map(p=>p.id));
+  if(mapOK) props.forEach(p=>{ if(!markers[p.id])return; if(shownIds.has(p.id)) markers[p.id].addTo(map); else map.removeLayer(markers[p.id]); });
+  if(!list.length){ listpane.innerHTML='<div class="empty">No spaces match those filters.<br>Try loosening a requirement.</div>'; }
+  else listpane.innerHTML=list.map((p,i)=>cardHTML(p,i)).join('');
+  document.getElementById('visCount').textContent=list.length;
+  listpane.querySelectorAll('.card').forEach(c=>{
+    const id=c.dataset.id;
+    c.addEventListener('click',()=>openDrawer(id));
+    c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openDrawer(id);}});
+    c.addEventListener('mouseenter',()=>{ if(mapOK&&markers[id]&&markers[id]._icon) markers[id]._icon.querySelector('.marker-pin').style.transform='rotate(-45deg) scale(1.25)'; });
+    c.addEventListener('mouseleave',()=>{ if(mapOK&&markers[id]&&markers[id]._icon) markers[id]._icon.querySelector('.marker-pin').style.transform='rotate(-45deg) scale(1)'; });
+  });
+}
+function highlightCard(id){ listpane.querySelectorAll('.card').forEach(c=>c.classList.toggle('active',c.dataset.id===id)); }
+function scrollToCard(id){ const c=listpane.querySelector(`.card[data-id="${id}"]`); if(c) c.scrollIntoView({behavior:'smooth',block:'center'}); }
+ 
+const drawer=document.getElementById('drawer'), scrim=document.getElementById('scrim');
+function drow(k,v){
+  const na=(v===null||v===undefined||/^not\b|^n\/a/i.test(String(v)));
+  return `<div class="drow"><span class="dk">${esc(k)}</span><span class="dv ${na?'na':''}">${na?'Not listed':esc(v)}</span></div>`;
+}
+function openDrawer(id){
+  const p=props.find(x=>x.id===id); if(!p) return;
+  const idx=props.indexOf(p)+1;
+  const photo = p.image
+    ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" onerror="this.parentElement.innerHTML='<div class=&quot;ph-icon&quot;>Photos on source listing</div>'">`
+    : `<div class="ph-icon">Photos on the source listing →</div>`;
+  let spacesHTML='';
+  if(p.spaces && p.spaces.length){
+    const cols = p.spaces[0].tier ? ['tier','desks','memberships','monthly'] :
+                 p.spaces[0].suite!==undefined ? ['suite','size','price_per_sf_yr','monthly'] : Object.keys(p.spaces[0]);
+    const labels={tier:'Tier',desks:'Desks',memberships:'Members',monthly:'$/mo',suite:'Suite',size:'Size',price_per_sf_yr:'$/SF/yr',fits:'Fits',use:'Use'};
+    spacesHTML=`<div class="dsect"><h4>Available spaces</h4>
+      <table class="spaces-tbl"><thead><tr>${cols.map(c=>`<th>${labels[c]||c}</th>`).join('')}</tr></thead>
+      <tbody>${p.spaces.map(s=>`<tr>${cols.map(c=>`<td>${esc(s[c]??'—')}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  }
+  const amenChips=(p.amenities||[]).map(a=>`<span class="chip">${esc(a)}</span>`).join('');
+  const sourceLink = p.source_url ? `<a class="drawer-cta" href="${esc(p.source_url)}" target="_blank" rel="noopener">View source listing ↗</a>` : '';
+  const mapLink=`<a class="drawer-cta ghost" href="https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}" target="_blank" rel="noopener">Open in Maps ↗</a>`;
+  drawer.innerHTML=`
+    <div class="drawer-hero">
+      <button class="drawer-close" onclick="closeDrawer()" aria-label="Close">×</button>
+      ${photo}
+    </div>
+    <div class="drawer-body">
+      <div class="hood">${idx.toString().padStart(2,'0')} · ${esc(p.neighborhood)}</div>
+      <h2>${esc(p.name)}</h2>
+      <div class="addr">${esc(p.address)}</div>
+      <div class="keyfacts">
+        <div class="keyfact"><div class="k">Asking rate</div><div class="v">${esc(p.price_per_sf||'Contact broker')}</div></div>
+        <div class="keyfact"><div class="k">Available</div><div class="v">${esc(p.available_sf||'Contact broker')}</div></div>
+        <div class="keyfact"><div class="k">Walk to ferry</div><div class="v">${p.ferry_mi} mi</div></div>
+        <div class="keyfact"><div class="k">Type</div><div class="v">${esc(p.type)}</div></div>
+      </div>
+      ${spacesHTML}
+      <div class="dsect"><h4>Cost & space</h4>
+        ${drow('Price / SF',p.price_per_sf)}
+        ${drow('Monthly cost',p.monthly_cost)}
+        ${drow('Building size',p.building_size)}
+        ${drow('Year built',p.year_built)}
+        ${p.lease_term?drow('Lease term',p.lease_term):''}
+      </div>
+      <div class="dsect"><h4>On-site</h4>
+        ${drow('Private offices',p.private_offices)}
+        ${drow('Kitchen',p.kitchen)}
+        ${drow('Gym / fitness',p.gym)}
+        ${drow('Bike storage',p.bike_storage)}
+        ${drow('Parking',p.parking)}
+        ${p.meeting_rooms?drow('Meeting rooms',p.meeting_rooms):''}
+      </div>
+      ${p.transportation||p.scores?`<div class="dsect"><h4>Getting there</h4>
+        ${p.transportation?drow('Transit',p.transportation):''}
+        ${p.scores&&p.scores.walk?drow('Walk score',p.scores.walk+'/100'):''}
+        ${p.scores&&p.scores.transit?drow('Transit score',p.scores.transit+'/100'):''}
+        ${p.scores&&p.scores.bike?drow('Bike score',p.scores.bike+'/100'):''}
+        ${drow('Walk to ferry terminal',p.ferry_mi+' mi')}
+      </div>`:''}
+      ${amenChips?`<div class="dsect"><h4>Features</h4><div class="chips">${amenChips}</div></div>`:''}
+      ${(p.broker||p.operator)?`<div class="dsect"><h4>Contact</h4>
+        ${p.broker?drow('Broker',p.broker):''}
+        ${p.operator?drow('Operator / owner',p.operator):''}
+        ${p.phone?drow('Phone',p.phone):''}
+      </div>`:''}
+      <div>${sourceLink}${mapLink}</div>
+      ${p.source_note?`<div class="source-note">Source: ${esc(p.source_note)}</div>`:''}
+    </div>`;
+  drawer.classList.add('open'); scrim.classList.add('open');
+  drawer.scrollTop=0;
+  highlightCard(id);
+  if(mapOK&&markers[id]){ map.flyTo([p.lat,p.lng],16,{duration:.6}); markers[id].openPopup(); }
+}
+function closeDrawer(){drawer.classList.remove('open');scrim.classList.remove('open');}
+scrim.addEventListener('click',closeDrawer);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
+window.openDrawer=openDrawer; window.closeDrawer=closeDrawer;
+ 
+const hoods=[...new Set(props.map(p=>p.neighborhood))].sort();
+document.getElementById('stat-hoods').textContent=hoods.length;
+const hoodSel=document.getElementById('hoodSel');
+hoods.forEach(h=>{const o=document.createElement('option');o.value=h;o.textContent=h;hoodSel.appendChild(o);});
+document.getElementById('sortSel').addEventListener('change',e=>{state.sort=e.target.value;applyFilters();});
+hoodSel.addEventListener('change',e=>{state.hood=e.target.value;applyFilters();});
+document.querySelectorAll('.amenity').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const a=btn.dataset.amen, on=btn.getAttribute('aria-pressed')==='true';
+    btn.setAttribute('aria-pressed',(!on).toString());
+    if(on) state.amens.delete(a); else state.amens.add(a);
+    applyFilters();
+  });
+});
+document.getElementById('resetBtn').addEventListener('click',()=>{
+  state={sort:'ferry',hood:'',amens:new Set(),active:null};
+  document.getElementById('sortSel').value='ferry';
+  hoodSel.value='';
+  document.querySelectorAll('.amenity').forEach(b=>b.setAttribute('aria-pressed','false'));
+  applyFilters();
+});
+ 
+applyFilters();
+</script>
+</body>
+</html>
