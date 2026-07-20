@@ -56,9 +56,14 @@ if the file is missing.
  
 All 13 spaces live in the `const DATA = {...}` block near the bottom of `index.html`.
 Each property has consistent keys (`price_per_sf`, `available_sf`, `parking`,
-`gym`, `kitchen`, `bike_storage`, `lat`, `lng`, `ferry_mi`, a `spaces` array, etc.).
-`null` renders as "Not listed." `properties.json` is the same data without the
-map coordinates, kept alongside as a clean source of truth.
+`gym`, `kitchen`, `bike_storage`, `lat`, `lng`, `ferry_mi`, a `spaces` array, and a
+`nearby` object with `coffee` and `food` lists, etc.).
+`null` renders as "Not listed." `properties.json` is the same data (including
+`nearby`) without the map coordinates, kept alongside as a clean source of truth.
+ 
+The `nearby` coffee and food spots are real places pulled from Google Places
+(name, one-line note, star rating). Each drawer shows the two closest, best-rated
+of each near that building.
  
 To move a pin, edit that property's `lat` / `lng`.
 To recompute walk-to-ferry, update `ferry_mi` (miles from Colman Dock, 47.6027, -122.3387).
