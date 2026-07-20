@@ -39,7 +39,7 @@
   body{font-family:var(--body);background:var(--sand);color:var(--charcoal);-webkit-font-smoothing:antialiased;line-height:1.5}
   a{color:inherit}
   ::selection{background:var(--wisteria);color:var(--charcoal)}
- 
+
   /* ---------- HERO ---------- */
   header.hero{
     position:relative;padding:38px clamp(18px,4vw,54px) 30px;
@@ -66,7 +66,7 @@
   .hero .statrow .stat{display:flex;flex-direction:column;gap:3px}
   .hero .statrow .num{font-family:var(--voice);font-size:clamp(1.6rem,3.4vw,2.3rem);font-weight:700;line-height:1;color:var(--plum)}
   .hero .statrow .lbl{font-family:var(--body);font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gray)}
- 
+
   /* ---------- CONTROLS ---------- */
   .controls{
     position:sticky;top:0;z-index:900;background:rgba(255,251,244,.94);backdrop-filter:blur(10px);
@@ -87,7 +87,7 @@
   .count-badge{margin-left:auto;font-family:var(--body);font-size:12px;color:var(--ink-dim);display:flex;align-items:center;gap:10px;white-space:nowrap}
   .count-badge b{color:var(--plum);font-weight:700}
   .reset{background:none;border:none;color:var(--violet);font-family:var(--body);font-size:11px;font-weight:600;cursor:pointer;text-decoration:underline;padding:0}
- 
+
   /* ---------- LAYOUT ---------- */
   .board{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:0;height:calc(100vh);min-height:640px}
   @media (max-width:960px){.board{grid-template-columns:1fr;height:auto}#map{height:58vh;position:sticky;top:118px;z-index:1}}
@@ -104,13 +104,13 @@
   .marker-pin{width:26px;height:26px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid var(--white);box-shadow:0 3px 10px rgba(51,52,54,.3);display:grid;place-items:center}
   .marker-pin span{transform:rotate(45deg);font-family:var(--body);font-size:10px;font-weight:700;color:#fff}
   .ferry-marker{background:var(--violet);width:34px;height:34px;border-radius:50%;border:3px solid #fff;display:grid;place-items:center;box-shadow:0 4px 16px rgba(90,45,130,.5);font-size:16px}
- 
+
   /* LIST */
   .listpane{overflow-y:auto;background:var(--sand);border-left:1px solid var(--line);padding:16px clamp(14px,2vw,20px) 60px}
   @media (max-width:960px){.listpane{height:auto}}
   .listpane::-webkit-scrollbar{width:10px}
   .listpane::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px;border:2px solid var(--sand)}
- 
+
   .card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r);margin-bottom:14px;overflow:hidden;cursor:pointer;transition:border-color .18s,transform .18s,box-shadow .18s}
   .card:hover,.card.active{border-color:var(--plum);transform:translateY(-2px);box-shadow:0 14px 30px rgba(51,52,54,.12)}
   .card.active{border-color:var(--plum);box-shadow:0 0 0 1px var(--plum),0 14px 30px rgba(51,52,54,.14)}
@@ -134,7 +134,7 @@
   .amen.on{color:var(--sage);border-color:var(--meadow);background:#f6f9f5}
   .amen.on .dot{background:var(--sage)}
   .amen .dot{width:6px;height:6px;border-radius:50%;background:var(--gray);opacity:.5}
- 
+
   /* DETAIL DRAWER */
   .drawer-scrim{position:fixed;inset:0;background:rgba(51,52,54,.4);backdrop-filter:blur(2px);z-index:1200;opacity:0;pointer-events:none;transition:opacity .25s}
   .drawer-scrim.open{opacity:1;pointer-events:auto}
@@ -171,7 +171,18 @@
   .drawer-cta.ghost{background:transparent;border:1px solid var(--line);color:var(--charcoal);margin-left:8px}
   .drawer-cta.ghost:hover{border-color:var(--plum)}
   .source-note{font-family:var(--body);font-size:11px;color:var(--gray);margin-top:18px;line-height:1.6}
- 
+
+
+  /* NEARBY coffee & food */
+  .nearby-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media (max-width:420px){.nearby-grid{grid-template-columns:1fr}}
+  .nearby-col h5{font-family:var(--body);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);margin-bottom:8px}
+  .nearby-item{display:flex;justify-content:space-between;gap:8px;align-items:baseline;padding:6px 0;border-bottom:1px solid var(--line-soft)}
+  .nearby-item:last-child{border-bottom:none}
+  .nearby-item .ni-name{font-weight:600;font-size:.86rem;color:var(--charcoal)}
+  .nearby-item .ni-note{font-size:.74rem;color:var(--ink-dim);display:block;margin-top:1px}
+  .nearby-item .ni-rating{font-family:var(--body);font-size:.74rem;font-weight:700;color:var(--sage);white-space:nowrap;flex-shrink:0}
+
   /* FOOTER */
   footer{padding:40px clamp(18px,4vw,54px);border-top:1px solid var(--line);background:var(--sand);color:var(--ink-dim);font-size:.82rem;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:flex-start}
   footer .fnote{max-width:54ch;line-height:1.6}
@@ -184,7 +195,7 @@
 </style>
 </head>
 <body>
- 
+
 <header class="hero">
   <div class="brandmark"><span class="s">sapience</span> <span class="ai">ai</span></div>
   <div class="eyebrow">Office Search &nbsp;·&nbsp; Downtown Seattle</div>
@@ -196,7 +207,7 @@
     <div class="stat"><span class="num">0.14–1.05</span><span class="lbl">Miles to ferry</span></div>
   </div>
 </header>
- 
+
 <div class="controls" id="controls">
   <div class="ctl-group">
     <label for="sortSel">Sort</label>
@@ -228,12 +239,12 @@
     <button class="reset" id="resetBtn">reset</button>
   </div>
 </div>
- 
+
 <div class="board">
   <div id="map" role="application" aria-label="Map of available office spaces in downtown Seattle"></div>
   <div class="listpane" id="listpane"></div>
 </div>
- 
+
 <footer>
   <div class="fnote">
     <b>How to read this.</b> Rates aren't directly comparable: coworking is all-in per month, NNN excludes operating costs, full-service includes them. <b>"Contact"</b> means the source didn't publish a rate. Data pulled July 19, 2026 — verify current figures with the listing broker before acting. Photos link to the source listing; swap in local images under <b>/images</b> anytime.
@@ -244,10 +255,10 @@
     <span><span class="sw" style="background:#5A2D82"></span> Ferry terminal</span>
   </div>
 </footer>
- 
+
 <div class="drawer-scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Space details"></aside>
- 
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
 const DATA = {
@@ -330,7 +341,33 @@ const DATA = {
       ],
       "lat": 47.6156,
       "lng": -122.3506,
-      "ferry_mi": 1.05
+      "ferry_mi": 1.05,
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Street Bean Cafe",
+            "note": "nonprofit roaster",
+            "rating": 4.7
+          },
+          {
+            "name": "Cherry Street Coffee House",
+            "note": "bagels + coffee",
+            "rating": 4.3
+          }
+        ],
+        "food": [
+          {
+            "name": "Rocco's",
+            "note": "pizza + bar",
+            "rating": 4.4
+          },
+          {
+            "name": "Hatch Cantina",
+            "note": "Mexican / Southwestern",
+            "rating": 4.3
+          }
+        ]
+      }
     },
     {
       "id": "journal-of-commerce",
@@ -384,7 +421,33 @@ const DATA = {
       ],
       "lat": 47.6027,
       "lng": -122.3358,
-      "ferry_mi": 0.14
+      "ferry_mi": 0.14,
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Saigon Drip Cafe",
+            "note": "Vietnamese coffee + banh mi",
+            "rating": 4.9
+          },
+          {
+            "name": "Day Made Kaffe Bar",
+            "note": "Copenhagen-style",
+            "rating": 4.8
+          }
+        ],
+        "food": [
+          {
+            "name": "Public House",
+            "note": "burgers + bar",
+            "rating": 4.9
+          },
+          {
+            "name": "Salt Harvest",
+            "note": "seasonal American",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "pacific-bldg",
@@ -449,7 +512,33 @@ const DATA = {
       ],
       "lat": 47.6032,
       "lng": -122.3308,
-      "ferry_mi": 0.37
+      "ferry_mi": 0.37,
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Pegasus Coffee Bar",
+            "note": "cozy loft cafe",
+            "rating": 4.7
+          },
+          {
+            "name": "Ghost Note Coffee",
+            "note": "Seattle Tower nook",
+            "rating": 4.4
+          }
+        ],
+        "food": [
+          {
+            "name": "Nom House Vietnamese Kitchen",
+            "note": "banh mi lunch",
+            "rating": 4.7
+          },
+          {
+            "name": "Yard House",
+            "note": "gastropub",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "columbia-center",
@@ -490,7 +579,33 @@ const DATA = {
       "spaces": [],
       "lat": 47.6045,
       "lng": -122.3301,
-      "ferry_mi": 0.42
+      "ferry_mi": 0.42,
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Monorail Espresso",
+            "note": "in-building, 4th-floor lobby",
+            "rating": 4.7
+          },
+          {
+            "name": "Starbucks (lobby)",
+            "note": "ground floor",
+            "rating": 4.2
+          }
+        ],
+        "food": [
+          {
+            "name": "Elephant & Castle",
+            "note": "British pub",
+            "rating": 4.5
+          },
+          {
+            "name": "Yard House",
+            "note": "gastropub",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "pioneer-building",
@@ -558,7 +673,33 @@ const DATA = {
       ],
       "lat": 47.6019,
       "lng": -122.334,
-      "ferry_mi": 0.23
+      "ferry_mi": 0.23,
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Saigon Drip Cafe",
+            "note": "Vietnamese coffee",
+            "rating": 4.9
+          },
+          {
+            "name": "Day Made Kaffe Bar",
+            "note": "Copenhagen-style",
+            "rating": 4.8
+          }
+        ],
+        "food": [
+          {
+            "name": "Public House",
+            "note": "burgers + bar",
+            "rating": 4.9
+          },
+          {
+            "name": "Salt Harvest",
+            "note": "seasonal American",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "smith-tower",
@@ -596,7 +737,33 @@ const DATA = {
       "spaces": [],
       "lat": 47.6021,
       "lng": -122.332,
-      "ferry_mi": 0.31
+      "ferry_mi": 0.31,
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Caffe Vita (Smith Tower)",
+            "note": "in-building roaster",
+            "rating": 4.3
+          },
+          {
+            "name": "Saigon Drip Cafe",
+            "note": "Vietnamese coffee",
+            "rating": 4.9
+          }
+        ],
+        "food": [
+          {
+            "name": "Public House",
+            "note": "burgers + bar",
+            "rating": 4.9
+          },
+          {
+            "name": "Salt Harvest",
+            "note": "seasonal American",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "qualtrics-tower",
@@ -645,7 +812,33 @@ const DATA = {
       ],
       "lat": 47.6055,
       "lng": -122.3355,
-      "ferry_mi": 0.24
+      "ferry_mi": 0.24,
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Caffe Ladro (2+U lobby)",
+            "note": "in-building",
+            "rating": 4.1
+          },
+          {
+            "name": "The Shop by Porter",
+            "note": "cafe + work space",
+            "rating": 4.5
+          }
+        ],
+        "food": [
+          {
+            "name": "Yard House",
+            "note": "gastropub",
+            "rating": 4.4
+          },
+          {
+            "name": "Alder & Ash",
+            "note": "American / bar",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "securities-bldg",
@@ -676,7 +869,33 @@ const DATA = {
       "spaces": [],
       "lat": 47.611,
       "lng": -122.3406,
-      "ferry_mi": 0.58
+      "ferry_mi": 0.58,
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Slow Day Coffee",
+            "note": "specialty pour-overs",
+            "rating": 4.7
+          },
+          {
+            "name": "Coffee TAB",
+            "note": "nonprofit, spacious",
+            "rating": 4.7
+          }
+        ],
+        "food": [
+          {
+            "name": "Biscuit Bitch",
+            "note": "Southern breakfast",
+            "rating": 4.4
+          },
+          {
+            "name": "Rocco's",
+            "note": "pizza + bar",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "decatur-bldg",
@@ -727,7 +946,33 @@ const DATA = {
       ],
       "lat": 47.6118,
       "lng": -122.3355,
-      "ferry_mi": 0.65
+      "ferry_mi": 0.65,
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Coffee Astronaut",
+            "note": "Colombian specialty",
+            "rating": 5.0
+          },
+          {
+            "name": "Hagen Coffee Roasters",
+            "note": "roaster + bakery",
+            "rating": 4.6
+          }
+        ],
+        "food": [
+          {
+            "name": "Yard House",
+            "note": "gastropub",
+            "rating": 4.4
+          },
+          {
+            "name": "SPIN Seattle",
+            "note": "ping-pong bar + food",
+            "rating": 4.5
+          }
+        ]
+      }
     },
     {
       "id": "belltown-collective",
@@ -782,7 +1027,33 @@ const DATA = {
       ],
       "lat": 47.6132,
       "lng": -122.3465,
-      "ferry_mi": 0.81
+      "ferry_mi": 0.81,
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Anchor & Bloom Cafe",
+            "note": "independent, bagels",
+            "rating": 4.8
+          },
+          {
+            "name": "Coffee TAB",
+            "note": "nonprofit, spacious",
+            "rating": 4.7
+          }
+        ],
+        "food": [
+          {
+            "name": "Rocco's",
+            "note": "pizza + bar",
+            "rating": 4.4
+          },
+          {
+            "name": "oh dang",
+            "note": "crispy chicken, late-night",
+            "rating": 5.0
+          }
+        ]
+      }
     },
     {
       "id": "terminal-sales",
@@ -825,7 +1096,33 @@ const DATA = {
       ],
       "lat": 47.6112,
       "lng": -122.3421,
-      "ferry_mi": 0.61
+      "ferry_mi": 0.61,
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Slow Day Coffee",
+            "note": "specialty pour-overs",
+            "rating": 4.7
+          },
+          {
+            "name": "Coffee TAB",
+            "note": "nonprofit, spacious",
+            "rating": 4.7
+          }
+        ],
+        "food": [
+          {
+            "name": "Biscuit Bitch",
+            "note": "Southern breakfast",
+            "rating": 4.4
+          },
+          {
+            "name": "Rocco's",
+            "note": "pizza + bar",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "pioneer-collective",
@@ -887,7 +1184,33 @@ const DATA = {
       ],
       "lat": 47.6135,
       "lng": -122.3437,
-      "ferry_mi": 0.78
+      "ferry_mi": 0.78,
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Coffee TAB",
+            "note": "nonprofit, spacious",
+            "rating": 4.7
+          },
+          {
+            "name": "Slow Day Coffee",
+            "note": "specialty pour-overs",
+            "rating": 4.7
+          }
+        ],
+        "food": [
+          {
+            "name": "oh dang",
+            "note": "crispy chicken, late-night",
+            "rating": 5.0
+          },
+          {
+            "name": "Rocco's",
+            "note": "pizza + bar",
+            "rating": 4.4
+          }
+        ]
+      }
     },
     {
       "id": "8th-and-olive",
@@ -929,13 +1252,39 @@ const DATA = {
       "spaces": [],
       "lat": 47.6128,
       "lng": -122.3348,
-      "ferry_mi": 0.72
+      "ferry_mi": 0.72,
+      "nearby": {
+        "coffee": [
+          {
+            "name": "Caffe Umbria (Olive Way)",
+            "note": "Italian, generations-owned",
+            "rating": 4.7
+          },
+          {
+            "name": "Coffee Astronaut",
+            "note": "Colombian specialty",
+            "rating": 5.0
+          }
+        ],
+        "food": [
+          {
+            "name": "Alder & Ash",
+            "note": "American / bar",
+            "rating": 4.4
+          },
+          {
+            "name": "Elephant & Castle",
+            "note": "British pub",
+            "rating": 4.5
+          }
+        ]
+      }
     }
   ]
 };
 const props = DATA.properties;
 const FERRY = {lat:47.6027, lng:-122.3387};
- 
+
 const isCoworking = p => /cowork|flex/i.test(p.type);
 const markerColor = p => isCoworking(p) ? '#7A9B7E' : '#674C67';
 const has = (p,key) => {
@@ -946,9 +1295,9 @@ const has = (p,key) => {
 function sizeKey(p){const m=(p.available_sf||'').replace(/,/g,'').match(/(\d+)\s*SF/i);return m?+m[1]:Infinity;}
 function priceKey(p){const s=p.price_per_sf||'';const m=s.replace(/,/g,'').match(/\$(\d+(?:\.\d+)?)/);return m?+m[1]:Infinity;}
 const esc = s => String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
- 
+
 let state={sort:'ferry', hood:'', amens:new Set(), active:null};
- 
+
 // ---- map (resilient) ----
 let map=null, markers={}, mapOK=false;
 try{
@@ -963,11 +1312,11 @@ try{
   const mapEl=document.getElementById('map');
   if(mapEl) mapEl.innerHTML='<div style="height:100%;display:grid;place-items:center;text-align:center;color:var(--gray);font-family:var(--voice);font-style:italic;padding:24px">Map could not load.<br>The list still works — click any card for details.</div>';
 }
- 
+
 if(mapOK){
 L.marker([FERRY.lat,FERRY.lng],{icon:L.divIcon({className:'',html:'<div class="ferry-marker">⛴</div>',iconSize:[34,34],iconAnchor:[17,17]}),zIndexOffset:500})
  .addTo(map).bindPopup('<div class="pop-name">Colman Dock</div><div class="pop-hood">Ferry Terminal</div><div class="pop-row">Washington State Ferries — the reference point for every walk time on this board.</div>');
- 
+
 props.forEach((p,i)=>{
   const col=markerColor(p);
   const icon=L.divIcon({className:'',iconSize:[26,26],iconAnchor:[13,26],popupAnchor:[0,-24],
@@ -978,7 +1327,7 @@ props.forEach((p,i)=>{
   markers[p.id]=m;
 });
 } // end if(mapOK)
- 
+
 function popupHTML(p,i){
   return `<div class="pop-name">${i+1}. ${esc(p.name)}</div>
     <div class="pop-hood">${esc(p.neighborhood)}</div>
@@ -986,7 +1335,7 @@ function popupHTML(p,i){
     <div class="pop-row"><b>Ferry:</b> ${p.ferry_mi} mi walk</div>
     <a class="pop-cta" href="#" onclick="openDrawer('${p.id}');return false;">View details →</a>`;
 }
- 
+
 const listpane=document.getElementById('listpane');
 function amenState(p){
   return [['gym','Gym',has(p,'gym')],['bike','Bike',has(p,'bike_storage')],['kitchen','Kitchen',has(p,'kitchen')],['parking','Parking',has(p,'parking')]];
@@ -1067,7 +1416,7 @@ function render(list){
 }
 function highlightCard(id){ listpane.querySelectorAll('.card').forEach(c=>c.classList.toggle('active',c.dataset.id===id)); }
 function scrollToCard(id){ const c=listpane.querySelector(`.card[data-id="${id}"]`); if(c) c.scrollIntoView({behavior:'smooth',block:'center'}); }
- 
+
 const drawer=document.getElementById('drawer'), scrim=document.getElementById('scrim');
 function drow(k,v){
   const na=(v===null||v===undefined||/^not\b|^n\/a/i.test(String(v)));
@@ -1130,6 +1479,15 @@ function openDrawer(id){
         ${drow('Walk to ferry terminal',p.ferry_mi+' mi')}
       </div>`:''}
       ${amenChips?`<div class="dsect"><h4>Features</h4><div class="chips">${amenChips}</div></div>`:''}
+      ${p.nearby?`<div class="dsect"><h4>Nearby coffee &amp; food</h4>
+        <div class="nearby-grid">
+          <div class="nearby-col"><h5>Coffee</h5>
+            ${(p.nearby.coffee||[]).map(n=>`<div class="nearby-item"><div><span class="ni-name">${esc(n.name)}</span><span class="ni-note">${esc(n.note)}</span></div><span class="ni-rating">${n.rating}</span></div>`).join('')}
+          </div>
+          <div class="nearby-col"><h5>Food</h5>
+            ${(p.nearby.food||[]).map(n=>`<div class="nearby-item"><div><span class="ni-name">${esc(n.name)}</span><span class="ni-note">${esc(n.note)}</span></div><span class="ni-rating">${n.rating}</span></div>`).join('')}
+          </div>
+        </div></div>`:''}
       ${(p.broker||p.operator)?`<div class="dsect"><h4>Contact</h4>
         ${p.broker?drow('Broker',p.broker):''}
         ${p.operator?drow('Operator / owner',p.operator):''}
@@ -1147,7 +1505,7 @@ function closeDrawer(){drawer.classList.remove('open');scrim.classList.remove('o
 scrim.addEventListener('click',closeDrawer);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer();});
 window.openDrawer=openDrawer; window.closeDrawer=closeDrawer;
- 
+
 const hoods=[...new Set(props.map(p=>p.neighborhood))].sort();
 document.getElementById('stat-hoods').textContent=hoods.length;
 const hoodSel=document.getElementById('hoodSel');
@@ -1169,7 +1527,7 @@ document.getElementById('resetBtn').addEventListener('click',()=>{
   document.querySelectorAll('.amenity').forEach(b=>b.setAttribute('aria-pressed','false'));
   applyFilters();
 });
- 
+
 applyFilters();
 </script>
 </body>
